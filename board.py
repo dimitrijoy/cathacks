@@ -1,1 +1,0 @@
-# connor more like loser
