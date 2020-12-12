@@ -50,7 +50,7 @@ class Board:
 
         if src != self.FREE: # moves allowed for pieces only
             if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
-                if dest.lower() != 'a' and self.is_legal(old, new, src, dest): # move is possible and is not to a king
+                if self.is_legal(old, new, src, dest): # move is legal in accordance with the game rules
                     self.__board[old[0]][old[1]] = self.FREE
                     self.__board[new[0]][new[1]] = src
                     self.update_los(old, new, src, dest) # updates spaces under attack
@@ -63,6 +63,9 @@ class Board:
     # primarily determines if the path of a move is allowed
     # unavoidably massive monster function
     def is_legal(self, old, new, src, dest):
+        # pre-conditions
+        if dest.upper() == 'A': # cannot move to the space with a king
+            return self.INVALID
         if src.upper() == 'P': # pawn 
             if new[0] == old[0] - self.__turn and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
                 return self.VALID
@@ -97,7 +100,7 @@ class Board:
                             return self.INVALID
                 else: # down and left
                     for i in range(1, new[0] - old[0]):
-                        if self.__board[old[0]+i][new[1]+i] != self.FREE:
+                        if self.__board[new[0]-i][new[1]+i] != self.FREE:
                             return self.INVALID
                 return self.VALID
             else:
@@ -159,7 +162,7 @@ class Board:
                             return self.INVALID
                 else: # down and left
                     for i in range(1, new[0] - old[0]):
-                        if self.__board[old[0]+i][new[1]+i] != self.FREE:
+                        if self.__board[new[0]-i][new[1]+i] != self.FREE:
                             return self.INVALID
                 return self.VALID
             else:
