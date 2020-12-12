@@ -9,7 +9,7 @@ CAPTION = "Chess"
 pygame.display.set_caption(CAPTION)
 
 # window dimens
-DIMENS = WIDTH, HEIGHT = ((1000,800))
+DIMENS = WIDTH, HEIGHT = ((800,800))
 screenPieces = screen = pygame.display.set_mode(DIMENS)
 
 # colors
@@ -39,8 +39,8 @@ pieces = {'p': p, 'P': P, 'r': r, 'R': R, 'k': k, 'K': K,
 
 # displays the game board
 def create_board():
-    for i in range(8):
-        for j in range(8):
+    for i in range(board.DIMENS):
+        for j in range(board.DIMENS):
             # White then Black
             pygame.draw.rect(screenPieces, WHITE, [(i*2)*100, (2*j)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i-1)*100, (2*j)*100, 100, 100])
@@ -54,6 +54,7 @@ def update_board():
     for i in range(board.DIMENS):
             for j in range(board.DIMENS):
                 screenPieces.blit(pieces[board.at(i,j)], ((j*100), (i*100))) 
+
 
 update_board() # init
 while True:
