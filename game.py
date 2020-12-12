@@ -19,6 +19,10 @@ class Board:
                         ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R']]
         self.__turn = self.WHITE # white always goes first
     
+    # returns piece at [row][col]
+    def at(self, row, col):
+        return self.__board[row][col]
+    
     # determines if a particular move is possible in accordance with the game rules
     def is_available(self, old, new, src, dest):
         if src.lower() == 'p': # pawn 
