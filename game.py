@@ -1,3 +1,12 @@
+# plays against the human player
+class AI:
+    def move(self, board):
+        for i in range(board.DIMENS):
+            for j in range(board.DIMENS):
+                if board.at(i, j) == 'p': # black piece
+                    if board.move((i, j), (i+1, j)):
+                        break
+
 # manages the game, including turns, movement, and end conditions
 class Board:
     # constants
@@ -26,6 +35,8 @@ class Board:
     # determines if a particular move is possible in accordance with the game rules
     # unavoidably massive monster function
     def is_available(self, old, new, src, dest):
+        if self.in_check(): # do not proceed if in check
+            return self.INVALID
         if src == 'P': # pawn 
             if new[0] == old[0] - 1 and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
                 return self.VALID
@@ -156,9 +167,10 @@ class Board:
 
         if src != self.FREE: # moves allowed for pieces only
             if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
-                if self.is_available(old, new, src, dest): # move is available
+                if dest.lower() != 'a' and self.is_available(old, new, src, dest): # move is available and is not to a king
                     self.__board[old[0]][old[1]] = self.FREE
                     self.__board[new[0]][new[1]] = src
+                    self.__turn *= -1 # changes turns
                     return self.VALID # success!
             
         return self.INVALID # invalid move
