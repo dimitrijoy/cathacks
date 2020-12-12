@@ -53,7 +53,7 @@ def update_board():
     create_board()
     for i in range(board.DIMENS):
             for j in range(board.DIMENS):
-                screenPieces.blit(pieces[board.at(i,j)], ((j*100)+25, (i*100)+25)) 
+                screenPieces.blit(pieces[board.at(i,j)], ((j*100), (i*100))) 
 
 update_board() # init
 while True:
