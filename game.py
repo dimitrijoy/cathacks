@@ -43,6 +43,27 @@ class Board:
                 return self.VALID
             else:
                 return self.INVALID
+        if src.lower() == 'b': # bishop
+            if new[0] - old[0] == new[1] - old[1]: # valid diagonal movement
+                if new[0] < old[0] and new[1] > old[1]: # up and right 
+                    for i in range(new[0], old[0]):
+                        if self.__board[new[0]+i][old[1]+i] == self.FREE:
+                            return self.INVALID
+                elif new[0] < old[0] and new[1] < old[1]: # up and left
+                    for i in range(new[0], old[0]):
+                        if self.__board[new[0]+i][new[1]+i] == self.FREE:
+                            return self.INVALID
+                elif new[0] > old[0] and new[1] > old[1]: # down and right
+                    for i in range(old[0], new[0]):
+                        if self.__board[old[0]+i][old[1]+i] == self.FREE:
+                            return self.INVALID
+                else: # down and left
+                    for i in range(old[0], new[0]):
+                        if self.__board[old[0]+i][new[1]+i] == self.FREE:
+                            return self.INVALID
+                return self.VALID
+            else:
+                return self.INVALID
         if src.lower() == 'r': # rook
             if new[0] == old[0]: # same row
                 if new[1] > old[1]:
@@ -83,9 +104,7 @@ class Board:
             elif new[0] == old[0] + 1 and new[1] == old[1] + 1 and dest == self.FREE: # move one place backward right into a free space
                 return self.VALID
             else:
-                return self.INVALID  
-
-
+                return self.INVALID
     
     # moves a specified piece
     # returns True on success and False otherwise for the caller to handle
