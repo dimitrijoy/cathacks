@@ -16,7 +16,44 @@ class Chess:
     def generate_legal_moves(self):
         for i in range(self.__board.DIMENS):
             for j in range(self.__board.DIMENS):
+                # finished other funcs first
+                piece = self.at(i, j)
+    
+    def generate_knight_moves(self, color, pos):
+        legal_moves = []
 
+    # generates legal moves for a particular bishop
+    def generate_bishop_moves(self, color, pos):
+        legal_moves = []
+        for i in range(1, self.__board.DIMENS): # up and right
+            piece = self.at(pos[0]-i, pos[1]+i) 
+            if piece != self.__board.FREE: # not a free space
+                if color != piece.get_color(): # opponent's piece
+                    legal_moves.append((pos[0]-i, pos[1]+i))
+                break
+            legal_moves.append((pos[0]-i, pos[1]+i))
+        for i in range(1, self.__board.DIMENS): # up and left
+            piece = self.at(pos[0]-i, pos[1]-i) 
+            if piece != self.__board.FREE: # not a free space
+                if color != piece.get_color(): # opponent's piece
+                    legal_moves.append((pos[0]-i, pos[1]-i))
+                break
+            legal_moves.append((pos[0]-i, pos[1]-i))
+        for i in range(1, self.__board.DIMENS): # down and right
+            piece = self.at(pos[0]+i, pos[1]+i) 
+            if piece != self.__board.FREE: # not a free space
+                if color != piece.get_color(): # opponent's piece
+                    legal_moves.append((pos[0]+i, pos[1]+i))
+                break
+            legal_moves.append((pos[0]+i, pos[1]+i))
+        for i in range(1, self.__board.DIMENS): # down and left
+            piece = self.at(pos[0]+i, pos[1]-i) 
+            if piece != self.__board.FREE: # not a free space
+                if color != piece.get_color(): # opponent's piece
+                    legal_moves.append((pos[0]+i, pos[1]-i))
+                break
+            legal_moves.append((pos[0]+i, pos[1]-i))
+        return legal_moves
 
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
