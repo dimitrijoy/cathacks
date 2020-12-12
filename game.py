@@ -45,7 +45,7 @@ class Board:
             else:
                 return self.INVALID
         if src == 'B': # bishop
-            if abs(new[0] - old[0]) == abs(new[1] - old[1]): # valid diagonal movement
+            if abs(new[0] - old[0]) == abs(new[1] - old[1]): # same diagonal
                 if new[0] < old[0] and new[1] > old[1]: # up and right 
                     for i in range(1, old[0] - new[0]):
                         if self.__board[new[0]+i][old[1]+i] != self.FREE:
@@ -84,6 +84,47 @@ class Board:
                     for i in range(old[0]-1, new[0], -1):
                         if self.__board[i][old[1]] != self.FREE:
                             return self.INVALID
+            else:
+                return self.INVALID
+            return self.VALID
+        if src == 'Q': # queen
+            # combines rook and biship movement
+            if new[0] == old[0]: # same row
+                if new[1] > old[1]:
+                    for i in range(old[1]+1, new[1]):
+                        if self.__board[old[0]][i] != self.FREE:
+                            return self.INVALID
+                else: # move left
+                    for i in range(old[1]-1, new[1], -1):
+                        if self.__board[old[0]][i] != self.FREE:
+                            return self.INVALID
+            elif new[1] == old[1]: # same column
+                if new[0] > old[0]: # move down
+                    for i in range(old[0]+1, new[0]):
+                        if self.__board[i][old[1]] != self.FREE:
+                            return self.INVALID
+                else: # move up
+                    for i in range(old[0]-1, new[0], -1):
+                        if self.__board[i][old[1]] != self.FREE:
+                            return self.INVALID
+            elif abs(new[0] - old[0]) == abs(new[1] - old[1]): # same diagonal
+                if new[0] < old[0] and new[1] > old[1]: # up and right 
+                    for i in range(1, old[0] - new[0]):
+                        if self.__board[new[0]+i][old[1]+i] != self.FREE:
+                            return self.INVALID
+                elif new[0] < old[0] and new[1] < old[1]: # up and left
+                    for i in range(1, old[0] - new[0]):
+                        if self.__board[new[0]+i][new[1]+i] != self.FREE:
+                            return self.INVALID
+                elif new[0] > old[0] and new[1] > old[1]: # down and right
+                    for i in range(1, new[0] - old[0]):
+                        if self.__board[old[0]+i][old[1]+i] != self.FREE:
+                            return self.INVALID
+                else: # down and left
+                    for i in range(1, new[0] - old[0]):
+                        if self.__board[old[0]+i][new[1]+i] != self.FREE:
+                            return self.INVALID
+                return self.VALID
             else:
                 return self.INVALID
             return self.VALID
