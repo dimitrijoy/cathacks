@@ -14,7 +14,7 @@ screenPieces = screen = pygame.display.set_mode(DIMENS)
 
 # colors
 WHITE = (192, 192, 192)
-BLACK = (40, 40, 40)
+BLACK = (40, 120, 40)
 
 # game attrs
 board = Board()
