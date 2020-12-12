@@ -11,8 +11,8 @@ size = width, height = ((800,800))
 screen = pygame.display.set_mode(size)
 screenPieces = pygame.display.set_mode(size)
 # Colors
-white = (255, 255, 255)
-black = (0, 0, 0)
+white = (192, 192, 192)
+black = (40, 40, 40)
 
 # Displays the game board
 def createBoard():
@@ -25,10 +25,11 @@ def createBoard():
                 pygame.draw.rect(screen, black, [(2*i)*100, (2*j-1)*100, 100, 100])
 
 # Game Pieces
-blackBishop = pygame.image.load("blackBishopElf.jpg")
+blackBishop = pygame.image.load("images/blackBishopElf.png")
 blackBishopRect = blackBishop.get_rect()
 
-
+blackPawn = pygame.image.load("images/blackPawnElf.png")
+blackPawnRect = blackPawn.get_rect()
 
 done = False
 
@@ -38,7 +39,9 @@ while not done :
         # Closes program
         if event.type == pygame.QUIT:
             done = True
-        screen.blit(blackBishop, (300,20))
+        screen.blit(blackBishop, (325,25))
+        for i in range(8):
+            screen.blit(blackPawn, ((i*100)+25, 125))
 
         #Displays GUI
         pygame.display.flip()
