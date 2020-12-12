@@ -26,10 +26,17 @@ def createBoard():
 
 # Game Pieces
 blackBishop = pygame.image.load("images/blackBishopElf.png")
-blackBishopRect = blackBishop.get_rect()
 
 blackPawn = pygame.image.load("images/blackPawnElf.png")
-blackPawnRect = blackPawn.get_rect()
+
+blackRook = pygame.image.load("images/blackRookSanta.png")
+
+blackKnight = pygame.image.load("images/blackKnightReindeer.png")
+
+blackQueen = pygame.image.load("images/blackQueenSanta.png")
+
+blackKing = pygame.image.load("images/blackKingSanta.png")
+
 
 done = False
 
@@ -39,9 +46,14 @@ while not done :
         # Closes program
         if event.type == pygame.QUIT:
             done = True
-        screen.blit(blackBishop, (325,25))
         for i in range(8):
             screen.blit(blackPawn, ((i*100)+25, 125))
-
+        for i in range(2):
+            screen.blit(blackKnight, (125+(i*600), 25))
+            screen.blit(blackRook, (25+(i*600),25))
+            screen.blit(blackBishop, (225+(i*300),25))
+        screen.blit(blackQueen, (425, 25))
+        screen.blit(blackKing, (325, 25))
+        
         #Displays GUI
         pygame.display.flip()
