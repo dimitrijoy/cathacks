@@ -1,3 +1,5 @@
+from chess import Chess, Piece, Pawn, Knight, Bishop, Rook, Queen, King
+
 # maintains the position of the pieces on the board
 class Board:
     # constants
@@ -8,14 +10,14 @@ class Board:
 
     def __init__(self):
         # lowercase corresponds to black and uppercase to white
-        self.__board = [['r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'],
-                        ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+        self.__board = [[Rook(Chess.BLACK), Knight(Chess.BLACK), Bishop(Chess.BLACK), Queen(Chess.BLACK), King(Chess.BLACK), Bishop(Chess.BLACK), Knight(Chess.BLACK), Rook(Chess.BLACK)],
+                        [Pawn(Chess.BLACK), Pawn(Chess.BLACK), Pawn(Chess.BLACK), Pawn(Chess.BLACK), Pawn(Chess.BLACK), Pawn(Chess.BLACK), Pawn(Chess.BLACK), Pawn(Chess.BLACK)],
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-                        ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-                        ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R']]
+                        [Pawn(Chess.WHITE), Pawn(Chess.WHITE), Pawn(Chess.WHITE), Pawn(Chess.WHITE), Pawn(Chess.WHITE), Pawn(Chess.WHITE), Pawn(Chess.WHITE), Pawn(Chess.WHITE)],
+                        [Rook(Chess.WHITE), Knight(Chess.WHITE), Bishop(Chess.WHITE), Queen(Chess.WHITE), King(Chess.WHITE), Bishop(Chess.WHITE), Knight(Chess.WHITE), Rook(Chess.WHITE)]]
         self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
                                 (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)]
         self.__los = {self.BLACK: [(2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7)],
@@ -163,26 +165,3 @@ class Board:
                 return self.VALID
             else:
                 return self.INVALID
-    
-    # proceeds to the next turn
-    # updates necessary attributes on turn change
-    def next(self):
-        self.__turn *= -1 # changes turns
-    
-    # updates spaces under attack
-    def update_los(self, old, new, src, dest):
-        # removes spaces under attack from the old position and adds space under attack from the new position
-        if src.upper() == 'P': # pawn
-            # TODO: it is possible that the spaces added are out of bounds, which is wasteful, but not game-breaking; consider fixing this
-            self.__los[self.__turn].remove((old[0] - self.__turn, old[1] - 1)); self.__los[self.__turn].remove((old[0] - self.__turn, old[1] + 1))
-            self.__los[self.__turn].append((new[0] - self.__turn, new[1] - 1)); self.__los[self.__turn].append((new[0] - self.__turn, new[1] + 1))
-        if src.upper() == 'K': # knight
-            pass
-        if src.upper() == 'B': # bishop
-            pass
-        if src.upper() == 'R': # rook
-            pass
-        if src.upper() == 'Q': # queen
-            pass
-        if src.upper() == 'A': # king
-            pass

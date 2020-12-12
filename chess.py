@@ -7,11 +7,16 @@ class Chess:
 
     def __init__(self):
         self.__board = Board()
-        self.__legal_moves = None
         self.__turn = self.WHITE # white always goes first
     
+    # returns piece at [row][col]
+    def at(self, row, col):
+        return self.__board.at(row, col)
+    
     def generate_legal_moves(self):
-        for 
+        for i in range(self.__board.DIMENS):
+            for j in range(self.__board.DIMENS):
+
 
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
@@ -29,23 +34,32 @@ class Chess:
         if src != self.FREE: # moves allowed for pieces only
             if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
                 if self.is_legal(old, new, src, dest): # move is legal in accordance with the game rules
-                    self.__board[old[0]][old[1]] = self.FREE
-                    self.__board[new[0]][new[1]] = src
-                    self.update_los(old, new, src, dest) # updates spaces under attack
-                    print(self.__los)
-                    self.next()
+                    self.__board.move(old, new)
+                    self.next() # next turn
+        
+    # next turn
+    def next(self):
+        self.__turn *= -1 # changes turns
 
 # generic piece in a game of chess
 class Piece:
-    def __init__(self, color, type, score):
+    def __init__(self, color, score, type):
         self.__color = color
         self.__type = type
         self.__score = score
         self.__legal_moves = []
     
+    # gets color of piece
+    def get_color(self):
+        return self.__color
+    
     # gets legal moves
     def get_legal_moves(self):
         return self.__legal_moves
+    
+    # gets score
+    def get_score(self):
+        return self.__score
     
     # gets the type of piece
     def get_type(self):
@@ -58,4 +72,29 @@ class Piece:
 # inherits properties of Piece
 class Pawn(Piece):
     def __init__(self, color):
-        super().__init__(color, 'p', 10)
+        super().__init__(color, 10,  'p')
+
+# inherits properties of Piece
+class Knight(Piece):
+    def __init__(self, color):
+        super().__init__(color, 'k', 30)
+
+# inherits properties of Piece
+class Bishop(Piece):
+    def __init__(self, color):
+        super().__init__(color, 'b', 30)
+
+# inherits properties of Piece
+class Rook(Piece):
+    def __init__(self, color):
+        super().__init__(color, 'r', 50)
+
+# inherits properties of Piece
+class Queen(Piece):
+    def __init__(self, color):
+        super().__init__(color, 'q', 90)
+
+# inherits properties of Piece
+class King(Piece):
+    def __init__(self, color):
+        super().__init__(color, 'a', 900)
