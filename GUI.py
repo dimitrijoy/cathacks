@@ -18,6 +18,7 @@ BLACK = (40, 40, 40)
 
 # game attrs
 board = Board()
+piecesSource = pygame.image.load("images/pieces.png")
 b = pygame.image.load("images/blackBishopElf.png")
 p = pygame.image.load("images/blackPawnElf.png")
 r = pygame.image.load("images/blackRookSanta.png")
@@ -37,6 +38,10 @@ pieces = {'p': p, 'P': P, 'r': r, 'R': R, 'k': k, 'K': K,
           'b': b, 'B': B, 'q': q, 'Q': Q, 'a': a, 'A': A,
           ' ': FREE}
 
+for i in range(1,2):
+    for j in range(1,6):
+        pieces[i+j] = pygame.Rect((j*320,i*320),(320,320))
+
 # displays the game board
 def create_board():
     for i in range(8):
@@ -55,7 +60,7 @@ def update_board():
     create_board()
     for i in range(board.DIMENS):
             for j in range(board.DIMENS):
-                screenPieces.blit(pieces[board.at(i,j)], ((j*100)+25, (i*100)+25))    
+                screenPieces.blit(piecesSource, ((j*100)+25, (i*100)+25), pieces[i])    
 
 update_board() # init
 while True:
