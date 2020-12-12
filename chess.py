@@ -9,6 +9,9 @@ class Chess:
         self.__board = Board()
         self.__legal_moves = None
         self.__turn = self.WHITE # white always goes first
+    
+    def generate_legal_moves(self):
+        for 
 
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
@@ -34,12 +37,25 @@ class Chess:
 
 # generic piece in a game of chess
 class Piece:
-    def __init__(self, color, score):
+    def __init__(self, color, type, score):
         self.__color = color
+        self.__type = type
         self.__score = score
         self.__legal_moves = []
+    
+    # gets legal moves
+    def get_legal_moves(self):
+        return self.__legal_moves
+    
+    # gets the type of piece
+    def get_type(self):
+        return self.__type
+    
+    # updates legal moves in accordance with the game rules
+    def update_legal_moves(self, legal_moves):
+        self.__legal_moves = legal_moves
 
 # inherits properties of Piece
 class Pawn(Piece):
-    def __init__(self, color, score):
-        super().__init__(color, score)
+    def __init__(self, color):
+        super().__init__(color, 'p', 10)
