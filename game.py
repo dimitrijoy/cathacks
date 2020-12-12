@@ -38,15 +38,26 @@ class Board:
     # returns True on success and False otherwise for the caller to handle
     def move(self, old, new):
         src, dest = self.__board[old[0]][old[1]], self.__board[new[0]][new[1]]
-        src_color, dest_color = self.WHITE if src.isupper() else self.BLACK, self.WHITE if dest.isupper() else self.BLACK
+        src_color, dest_color = self.FREE, self.FREE
+        if src.islower():
+            src_color = self.BLACK
+        elif src.isupper():
+            src_color = self.WHITE
+        if dest.islower():
+            dest_color = self.BLACK
+        elif dest.isupper():
+            dest_color = self.WHITE
 
+        print(old, new)
         if src != self.FREE: # moves allowed for pieces only
+            print(src_color, self.__turn, dest_color)
             if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
-                if dest.lower() != 'a' and self.path_exists(old, new, src, dest): # move is possible and is not to a king
+                print('hi')
+                if dest.lower() != 'a' and self.is_legal(old, new, src, dest): # move is possible and is not to a king
                     self.__board[old[0]][old[1]] = self.FREE
                     self.__board[new[0]][new[1]] = src
-                    self.__turn *= -1 # changes turns
                     self.update_los(old, new, src, dest) # updates spaces under attack
+                    self.next()
                     return self.VALID # success!
             
         return self.INVALID # invalid move
@@ -54,15 +65,15 @@ class Board:
     # determines if a particular move is possible in accordance with the game rules
     # primarily determines if the path of a move is allowed
     # unavoidably massive monster function
-    def path_exists(self, old, new, src, dest):
-        if src == 'P': # pawn 
-            if new[0] == old[0] - 1 and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
+    def is_legal(self, old, new, src, dest):
+        if src.upper() == 'P': # pawn 
+            if new[0] == old[0] - self.__turn and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
                 return self.VALID
-            elif new[0] == old[0] - 1 and (new[1] == old[1] + 1 or new[1] == old[1] - 1) and dest != self.FREE: # diagonal offensive move
+            elif new[0] == old[0] - self.__turn and (new[1] == old[1] + 1 or new[1] == old[1] - 1) and dest != self.FREE: # diagonal offensive move
                 return self.VALID # determining the color of dest is not necessary, as this is handled in move()
             else:
                 return self.INVALID
-        if src == 'K': # knight
+        if src.upper() == 'K': # knight
             if new[0] == old[0] - 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1): # move three places forward and one place to the right or left
                 return self.VALID
             elif new[0] == old[0] + 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2): # move one place forward and three places to the right or left
@@ -73,7 +84,7 @@ class Board:
                 return self.VALID
             else:
                 return self.INVALID
-        if src == 'B': # bishop
+        if src.upper() == 'B': # bishop
             if abs(new[0] - old[0]) == abs(new[1] - old[1]): # same diagonal
                 if new[0] < old[0] and new[1] > old[1]: # up and right 
                     for i in range(1, old[0] - new[0]):
@@ -94,7 +105,7 @@ class Board:
                 return self.VALID
             else:
                 return self.INVALID
-        if src == 'R': # rook
+        if src.upper() == 'R': # rook
             if new[0] == old[0]: # same row
                 if new[1] > old[1]:
                     for i in range(old[1]+1, new[1]):
@@ -116,7 +127,7 @@ class Board:
             else:
                 return self.INVALID
             return self.VALID
-        if src == 'Q': # queen
+        if src.upper() == 'Q': # queen
             # combines rook and biship movement
             if new[0] == old[0]: # same row
                 if new[1] > old[1]:
@@ -157,7 +168,7 @@ class Board:
             else:
                 return self.INVALID
             return self.VALID
-        if src == 'A': # king
+        if src.upper() == 'A': # king
             if new[0] == old[0] - 1 and new[1] == old[1]: # move one place forward
                 return self.VALID
             elif new[0] == old[0] + 1 and new[1] == old[1]: # move one place backward
@@ -176,6 +187,11 @@ class Board:
                 return self.VALID
             else:
                 return self.INVALID
+    
+    # proceeds to the next turn
+    # updates necessary attrs on turn change
+    def next(self):
+        self.__turn *= -1 # changes turns
     
     # updates spaces under attack
     def update_los(self, old, new, src, dest):
