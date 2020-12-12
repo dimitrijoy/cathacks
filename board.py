@@ -1,17 +1,7 @@
-# plays against the human player
-class AI:
-    def move(self, board):
-        for i in range(board.DIMENS):
-            for j in range(board.DIMENS):
-                if board.at(i, j) == 'p': # black piece
-                    if board.move((i, j), (i+1, j)):
-                        break
-
-# manages the game, including turns, movement, and end conditions
+# maintains the position of the pieces on the board
 class Board:
     # constants
-    DIMENS = 8 # board dimens
-    BLACK, WHITE = -1, 1 # for managing turns
+    DIMENS = 8 # board dimensM
     FREE = " " # free space
     INVALID, VALID = False, True # regarding moves
     SCORES = {'p': 10, 'k': 30, 'b': 30, 'r': 50, 'q': 90, 'a': 900}
@@ -26,9 +16,11 @@ class Board:
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
                         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
                         ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R']]
+        self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
+                                (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)]
         self.__los = {self.BLACK: [(2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7)],
                       self.WHITE: [(5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7)]} # line of sight
-        self.__turn = self.WHITE # white always goes first
+        
     
     # returns piece at [row][col]
     def at(self, row, col):
@@ -37,30 +29,11 @@ class Board:
     # moves a specified piece
     # returns True on success and False otherwise for the caller to handle
     def move(self, old, new):
-        src, dest = self.__board[old[0]][old[1]], self.__board[new[0]][new[1]]
-        src_color, dest_color = self.FREE, self.FREE
-        if src.islower():
-            src_color = self.BLACK
-        elif src.isupper():
-            src_color = self.WHITE
-        if dest.islower():
-            dest_color = self.BLACK
-        elif dest.isupper():
-            dest_color = self.WHITE
-
-        if src != self.FREE: # moves allowed for pieces only
-            if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
-                if self.is_legal(old, new, src, dest): # move is legal in accordance with the game rules
-                    self.__board[old[0]][old[1]] = self.FREE
-                    self.__board[new[0]][new[1]] = src
-                    self.update_los(old, new, src, dest) # updates spaces under attack
-                    self.next()
-                    return self.VALID # success!
-            
-        return self.INVALID # invalid move
+        temp = self.__board[old[0]][old[1]]
+        self.__board[old[0]][old[1]] = self.FREE
+        self.__board[new[0]][new[1]] = temp
     
-    # determines if a particular move is possible in accordance with the game rules
-    # primarily determines if the path of a move is allowed
+    # determines if a particular move is possible in accordance with the game rules and if the path of a move is allowed
     # unavoidably massive monster function
     def is_legal(self, old, new, src, dest):
         # pre-conditions
@@ -71,6 +44,9 @@ class Board:
                 return self.VALID
             elif new[0] == old[0] - self.__turn and (new[1] == old[1] + 1 or new[1] == old[1] - 1) and dest != self.FREE: # diagonal offensive move
                 return self.VALID # determining the color of dest is not necessary, as this is handled in move()
+            elif old in self.__unmoved_pawns and new[0] == old[0] - 2*self.__turn and new[1] == old[1] and dest == self.FREE and self.__board[old[0] - self.__turn][new[1]] == self.FREE:
+                self.__unmoved_pawns.remove(old)
+                return self.VALID # move two places forward on first move of pawn
             else:
                 return self.INVALID
         if src.upper() == 'K': # knight
@@ -189,10 +165,24 @@ class Board:
                 return self.INVALID
     
     # proceeds to the next turn
-    # updates necessary attrs on turn change
+    # updates necessary attributes on turn change
     def next(self):
         self.__turn *= -1 # changes turns
     
     # updates spaces under attack
     def update_los(self, old, new, src, dest):
-        pass
+        # removes spaces under attack from the old position and adds space under attack from the new position
+        if src.upper() == 'P': # pawn
+            # TODO: it is possible that the spaces added are out of bounds, which is wasteful, but not game-breaking; consider fixing this
+            self.__los[self.__turn].remove((old[0] - self.__turn, old[1] - 1)); self.__los[self.__turn].remove((old[0] - self.__turn, old[1] + 1))
+            self.__los[self.__turn].append((new[0] - self.__turn, new[1] - 1)); self.__los[self.__turn].append((new[0] - self.__turn, new[1] + 1))
+        if src.upper() == 'K': # knight
+            pass
+        if src.upper() == 'B': # bishop
+            pass
+        if src.upper() == 'R': # rook
+            pass
+        if src.upper() == 'Q': # queen
+            pass
+        if src.upper() == 'A': # king
+            pass
