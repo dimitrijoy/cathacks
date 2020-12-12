@@ -1,6 +1,8 @@
 # dependencies
-from game import Board
+from board import Board
+from chess import Chess
 import pygame
+import time
 
 pygame.init() # initializes the game
 
@@ -55,7 +57,6 @@ def update_board():
             for j in range(board.DIMENS):
                 screenPieces.blit(pieces[board.at(i,j)], ((j*100), (i*100))) 
 
-
 update_board() # init
 while True:
     for event in pygame.event.get():
@@ -65,6 +66,11 @@ while True:
             coordinates_init = pygame.mouse.get_pos()
             x_init = coordinates_init[1] // 100
             y_init = coordinates_init[0] // 100
+        elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
+            tempCoordinates = pygame.mouse.get_pos()
+            x_temp = tempCoordinates[1]
+            y_temp = tempCoordinates[0]
+            screenPieces.blit(pieces[board.at(x_init,y_init)], (y_temp,x_temp))
         elif event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
             coordinates_fin = pygame.mouse.get_pos()
             x_fin = coordinates_fin[1] // 100
