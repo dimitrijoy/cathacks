@@ -11,16 +11,27 @@ size = width, height = ((800,800))
 screen = pygame.display.set_mode(size)
 
 # Window Extras
+red = (255, 0, 0)
+green = (0, 188, 0)
+
 done = False
 
 
 while not done :
     for event in pygame.event.get():
+        # Closes program
         if event.type == pygame.QUIT:
             done = True
-        white = (255, 255, 255)
-        screen.fill(white)
-        tan = (255, 201, 144)
-        rect_size = ((100,100))
-        pygame.draw.rect(screen, tan, [100,100,100,100])
+        # Creates squares
+        for i in range(8):
+            for j in range(8):
+                pygame.draw.rect(screen, red, [(i*2)*100, (2*j)*100, 100, 100])
+                pygame.draw.rect(screen, green, [(2*i-1)*100, (2*j)*100, 100, 100])
+
+                pygame.draw.rect(screen, red, [(2*i-1)*100, (2*j-1)*100, 100, 100])
+                pygame.draw.rect(screen, green, [(2*i)*100, (2*j-1)*100, 100, 100])
+
+        
+        
+        #Displays GUI
         pygame.display.flip()
