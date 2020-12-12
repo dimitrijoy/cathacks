@@ -52,7 +52,6 @@ class Board:
         if src != self.FREE: # moves allowed for pieces only
             print(src_color, self.__turn, dest_color)
             if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
-                print('hi')
                 if dest.lower() != 'a' and self.is_legal(old, new, src, dest): # move is possible and is not to a king
                     self.__board[old[0]][old[1]] = self.FREE
                     self.__board[new[0]][new[1]] = src
@@ -86,9 +85,9 @@ class Board:
                 return self.INVALID
         if src.upper() == 'B': # bishop
             if abs(new[0] - old[0]) == abs(new[1] - old[1]): # same diagonal
-                if new[0] < old[0] and new[1] > old[1]: # up and right 
+                if new[0] < old[0] and new[1] > old[1]: # up and right
                     for i in range(1, old[0] - new[0]):
-                        if self.__board[new[0]+i][old[1]+i] != self.FREE:
+                        if self.__board[old[0]-i][old[1]+i] != self.FREE:
                             return self.INVALID
                 elif new[0] < old[0] and new[1] < old[1]: # up and left
                     for i in range(1, old[0] - new[0]):
@@ -148,9 +147,9 @@ class Board:
                         if self.__board[i][old[1]] != self.FREE:
                             return self.INVALID
             elif abs(new[0] - old[0]) == abs(new[1] - old[1]): # same diagonal
-                if new[0] < old[0] and new[1] > old[1]: # up and right 
+                if new[0] < old[0] and new[1] > old[1]: # up and right
                     for i in range(1, old[0] - new[0]):
-                        if self.__board[new[0]+i][old[1]+i] != self.FREE:
+                        if self.__board[old[0]-i][old[1]+i] != self.FREE:
                             return self.INVALID
                 elif new[0] < old[0] and new[1] < old[1]: # up and left
                     for i in range(1, old[0] - new[0]):
