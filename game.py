@@ -26,17 +26,35 @@ class Board:
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
                         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
                         ['R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R']]
+        self.__los = {self.BLACK: [(2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7)],
+                      self.WHITE: [(5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7)]} # line of sight
         self.__turn = self.WHITE # white always goes first
     
     # returns piece at [row][col]
     def at(self, row, col):
         return self.__board[row][col]
+
+    # moves a specified piece
+    # returns True on success and False otherwise for the caller to handle
+    def move(self, old, new):
+        src, dest = self.__board[old[0]][old[1]], self.__board[new[0]][new[1]]
+        src_color, dest_color = self.WHITE if src.isupper() else self.BLACK, self.WHITE if dest.isupper() else self.BLACK
+
+        if src != self.FREE: # moves allowed for pieces only
+            if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
+                if dest.lower() != 'a' and self.path_exists(old, new, src, dest): # move is possible and is not to a king
+                    self.__board[old[0]][old[1]] = self.FREE
+                    self.__board[new[0]][new[1]] = src
+                    self.__turn *= -1 # changes turns
+                    self.update_los(old, new, src, dest) # updates spaces under attack
+                    return self.VALID # success!
+            
+        return self.INVALID # invalid move
     
     # determines if a particular move is possible in accordance with the game rules
+    # primarily determines if the path of a move is allowed
     # unavoidably massive monster function
-    def is_available(self, old, new, src, dest):
-        if self.in_check(): # do not proceed if in check
-            return self.INVALID
+    def path_exists(self, old, new, src, dest):
         if src == 'P': # pawn 
             if new[0] == old[0] - 1 and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
                 return self.VALID
@@ -159,18 +177,6 @@ class Board:
             else:
                 return self.INVALID
     
-    # moves a specified piece
-    # returns True on success and False otherwise for the caller to handle
-    def move(self, old, new):
-        src, dest = self.__board[old[0]][old[1]], self.__board[new[0]][new[1]]
-        src_color, dest_color = self.WHITE if src.isupper() else self.BLACK, self.WHITE if dest.isupper() else self.BLACK
-
-        if src != self.FREE: # moves allowed for pieces only
-            if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
-                if dest.lower() != 'a' and self.is_available(old, new, src, dest): # move is available and is not to a king
-                    self.__board[old[0]][old[1]] = self.FREE
-                    self.__board[new[0]][new[1]] = src
-                    self.__turn *= -1 # changes turns
-                    return self.VALID # success!
-            
-        return self.INVALID # invalid move
+    # updates spaces under attack
+    def update_los(self, old, new, src, dest):
+        pass
