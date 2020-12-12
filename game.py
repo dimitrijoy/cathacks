@@ -33,13 +33,13 @@ class Board:
             else:
                 return self.INVALID
         if src.lower() == 'k': # knight
-            if new[0] == old[0] - 3 and (new[1] == old[1] + 1 or new[1] == old[1] - 1)  and dest == self.FREE: # move three places forward and one place to the right or left
+            if new[0] == old[0] - 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1)  and dest == self.FREE: # move three places forward and one place to the right or left
                 return self.VALID
-            elif new[0] == old[0] + 1 and (new[1] == old[1] + 3 or new[1] == old[1] - 3) and dest == self.FREE: # move one place forward and three places to the right or left
+            elif new[0] == old[0] + 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2) and dest == self.FREE: # move one place forward and three places to the right or left
                 return self.VALID
-            elif new[0] == old[0] + 3 and (new[1] == old[1] + 1 or new[1] == old[1] - 1)  and dest == self.FREE: # move three places backwards and one place to the right or left
+            elif new[0] == old[0] + 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1)  and dest == self.FREE: # move three places backwards and one place to the right or left
                 return self.VALID
-            elif new[0] == old[0] - 1 and (new[1] == old[1] + 3 or new[1] == old[1] - 3) and dest == self.FREE: # move one place backwards and three places to the right or left
+            elif new[0] == old[0] - 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2) and dest == self.FREE: # move one place backwards and three places to the right or left
                 return self.VALID
             else:
                 return self.INVALID
@@ -66,7 +66,7 @@ class Board:
                 return self.INVALID
         if src.lower() == 'r': # rook
             if new[0] == old[0]: # same row
-                if new[1] > old[1]:
+                if new[1] < old[1]:
                     for i in range(old[1], new[1]): # move right
                         if self.__board[old[0]][i] != self.FREE:
                             return self.INVALID
