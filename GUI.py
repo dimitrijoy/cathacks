@@ -18,40 +18,33 @@ BLACK = (40, 40, 40)
 
 # game attrs
 board = Board()
-piecesSource = pygame.image.load("images/pieces.png")
-b = pygame.image.load("images/blackBishopElf.png")
-p = pygame.image.load("images/blackPawnElf.png")
-r = pygame.image.load("images/blackRookSanta.png")
-k = pygame.image.load("images/blackKnightReindeer.png")
-q = pygame.image.load("images/blackQueenSanta.png")
-a = pygame.image.load("images/blackKingSanta.png")
-B = pygame.image.load("images/whiteBishopElf.png")
-P = pygame.image.load("images/whitePawnElf.png")
-R = pygame.image.load("images/whiteRookSanta.png")
-K = pygame.image.load("images/whiteKnightReindeer.png")
-Q = pygame.image.load("images/whiteQueenSanta.png")
-A = pygame.image.load("images/whiteKingSanta.png")
-FREE = pygame.image.load("images/blank.png")
+b = pygame.transform.scale(pygame.image.load("images/blackBishopElf.png"),(100,100))
+p = pygame.transform.scale(pygame.image.load("images/blackPawnElf.png"),(100,100))
+r = pygame.transform.scale(pygame.image.load("images/blackRookSanta.png"),(100,100))
+k = pygame.transform.scale(pygame.image.load("images/blackKnightReindeer.png"),(100,100))
+q = pygame.transform.scale(pygame.image.load("images/blackQueenSanta.png"),(100,100))
+a = pygame.transform.scale(pygame.image.load("images/blackKingSanta.png"),(100,100))
+B = pygame.transform.scale(pygame.image.load("images/whiteBishopElf.png"),(100,100))
+P = pygame.transform.scale(pygame.image.load("images/whitePawnElf.png"),(100,100))
+R = pygame.transform.scale(pygame.image.load("images/whiteRookSanta.png"),(100,100))
+K = pygame.transform.scale(pygame.image.load("images/whiteKnightReindeer.png"),(100,100))
+Q = pygame.transform.scale(pygame.image.load("images/whiteQueenSanta.png"),(100,100))
+A = pygame.transform.scale(pygame.image.load("images/whiteKingSanta.png"),(100,100))
+FREE = pygame.transform.scale(pygame.image.load("images/blank.png"),(100,100))
 
 # pieces to corresponding images
 pieces = {'p': p, 'P': P, 'r': r, 'R': R, 'k': k, 'K': K,
           'b': b, 'B': B, 'q': q, 'Q': Q, 'a': a, 'A': A,
           ' ': FREE}
 
-for i in range(1,2):
-    for j in range(1,6):
-        pieces[i+j] = pygame.Rect((j*320,i*320),(320,320))
-
 # displays the game board
 def create_board():
     for i in range(8):
         for j in range(8):
-            pygame.draw.rect(screen, WHITE, [(i*2)*100, (2*j)*100, 100, 100])
-            pygame.draw.rect(screen, BLACK, [(2*i-1)*100, (2*j)*100, 100, 100])
+            # White then Black
             pygame.draw.rect(screenPieces, WHITE, [(i*2)*100, (2*j)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i-1)*100, (2*j)*100, 100, 100])
-            pygame.draw.rect(screen, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
-            pygame.draw.rect(screen, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
+            # Black then White
             pygame.draw.rect(screenPieces, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
 
@@ -60,7 +53,7 @@ def update_board():
     create_board()
     for i in range(board.DIMENS):
             for j in range(board.DIMENS):
-                screenPieces.blit(piecesSource, ((j*100)+25, (i*100)+25), pieces[i])    
+                screenPieces.blit(pieces[board.at(i,j)], ((j*100)+25, (i*100)+25)) 
 
 update_board() # init
 while True:
