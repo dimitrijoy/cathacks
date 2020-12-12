@@ -33,13 +33,13 @@ class Board:
             else:
                 return self.INVALID
         if src.lower() == 'k': # knight
-            if new[0] == old[0] - 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1)  and dest == self.FREE: # move three places forward and one place to the right or left
+            if new[0] == old[0] - 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1): # move three places forward and one place to the right or left
                 return self.VALID
-            elif new[0] == old[0] + 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2) and dest == self.FREE: # move one place forward and three places to the right or left
+            elif new[0] == old[0] + 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2): # move one place forward and three places to the right or left
                 return self.VALID
-            elif new[0] == old[0] + 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1)  and dest == self.FREE: # move three places backwards and one place to the right or left
+            elif new[0] == old[0] + 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1): # move three places backwards and one place to the right or left
                 return self.VALID
-            elif new[0] == old[0] - 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2) and dest == self.FREE: # move one place backwards and three places to the right or left
+            elif new[0] == old[0] - 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2): # move one place backwards and three places to the right or left
                 return self.VALID
             else:
                 return self.INVALID
@@ -66,22 +66,22 @@ class Board:
                 return self.INVALID
         if src.lower() == 'r': # rook
             if new[0] == old[0]: # same row
-                if new[1] < old[1]:
-                    for i in range(old[1], new[1]): # move right
-                        if self.__board[old[0]][i] != self.FREE:
+                if new[1] > old[1]:
+                    for i in range(new[1], old[1]):
+                        if self.__board[old[0]][old[1] + i] != self.FREE:
                             return self.INVALID
                 else: # move left
                     for i in range(new[1], old[1], -1):
-                        if self.__board[old[0]][i] != self.FREE:
+                        if self.__board[old[0]][new[1] + i] != self.FREE:
                             return self.INVALID
             elif new[1] == old[1]: # same column
-                if new[0] < old[0]: # move up
-                    for i in range(new[0], old[0]): # move right
-                        if self.__board[i][old[1]] != self.FREE:
+                if new[0] > old[0]: # move down
+                    for i in range(new[0], old[0]):
+                        if self.__board[new[0] + i][old[1]] != self.FREE:
                             return self.INVALID
-                else: # move down
-                    for i in range(old[0], new[0], -1):
-                        if self.__board[i][old[1]] != self.FREE:
+                else: # move up
+                    for i in range(new[0], old[0], -1):
+                        if self.__board[old[0] + i][old[1]] != self.FREE:
                             return self.INVALID
             else:
                 return self.INVALID
