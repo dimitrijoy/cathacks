@@ -48,9 +48,7 @@ class Board:
         elif dest.isupper():
             dest_color = self.WHITE
 
-        print(old, new)
         if src != self.FREE: # moves allowed for pieces only
-            print(src_color, self.__turn, dest_color)
             if src_color == self.__turn and src_color != dest_color: # player is moving their own piece to a valid space
                 if dest.lower() != 'a' and self.is_legal(old, new, src, dest): # move is possible and is not to a king
                     self.__board[old[0]][old[1]] = self.FREE
