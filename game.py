@@ -24,15 +24,16 @@ class Board:
         return self.__board[row][col]
     
     # determines if a particular move is possible in accordance with the game rules
+    # unavoidably massive monster function
     def is_available(self, old, new, src, dest):
-        if src.lower() == 'p': # pawn 
+        if src == 'P': # pawn 
             if new[0] == old[0] - 1 and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
                 return self.VALID
             elif new[0] == old[0] - 1 and (new[1] == old[1] + 1 or new[1] == old[1] - 1) and dest != self.FREE: # diagonal offensive move
                 return self.VALID # determining the color of dest is not necessary, as this is handled in move()
             else:
                 return self.INVALID
-        if src.lower() == 'k': # knight
+        if src == 'K': # knight
             if new[0] == old[0] - 2 and (new[1] == old[1] + 1 or new[1] == old[1] - 1): # move three places forward and one place to the right or left
                 return self.VALID
             elif new[0] == old[0] + 1 and (new[1] == old[1] + 2 or new[1] == old[1] - 2): # move one place forward and three places to the right or left
@@ -43,28 +44,28 @@ class Board:
                 return self.VALID
             else:
                 return self.INVALID
-        if src.lower() == 'b': # bishop
-            if new[0] - old[0] == new[1] - old[1]: # valid diagonal movement
+        if src == 'B': # bishop
+            if abs(new[0] - old[0]) == abs(new[1] - old[1]): # valid diagonal movement
                 if new[0] < old[0] and new[1] > old[1]: # up and right 
-                    for i in range(new[0], old[0]):
-                        if self.__board[new[0]+i][old[1]+i] == self.FREE:
+                    for i in range(1, old[0] - new[0]):
+                        if self.__board[new[0]+i][old[1]+i] != self.FREE:
                             return self.INVALID
                 elif new[0] < old[0] and new[1] < old[1]: # up and left
-                    for i in range(new[0], old[0]):
-                        if self.__board[new[0]+i][new[1]+i] == self.FREE:
+                    for i in range(1, old[0] - new[0]):
+                        if self.__board[new[0]+i][new[1]+i] != self.FREE:
                             return self.INVALID
                 elif new[0] > old[0] and new[1] > old[1]: # down and right
-                    for i in range(old[0], new[0]):
-                        if self.__board[old[0]+i][old[1]+i] == self.FREE:
+                    for i in range(1, new[0] - old[0]):
+                        if self.__board[old[0]+i][old[1]+i] != self.FREE:
                             return self.INVALID
                 else: # down and left
-                    for i in range(old[0], new[0]):
-                        if self.__board[old[0]+i][new[1]+i] == self.FREE:
+                    for i in range(1, new[0] - old[0]):
+                        if self.__board[old[0]+i][new[1]+i] != self.FREE:
                             return self.INVALID
                 return self.VALID
             else:
                 return self.INVALID
-        if src.lower() == 'r': # rook
+        if src == 'R': # rook
             if new[0] == old[0]: # same row
                 if new[1] > old[1]:
                     for i in range(old[1]+1, new[1]):
@@ -86,22 +87,22 @@ class Board:
             else:
                 return self.INVALID
             return self.VALID
-        if src.lower() == 'a': # king
-            if new[0] == old[0] - 1 and new[1] == old[1] and dest == self.FREE: # move one place forward into a free space
+        if src == 'A': # king
+            if new[0] == old[0] - 1 and new[1] == old[1]: # move one place forward
                 return self.VALID
-            elif new[0] == old[0] + 1 and new[1] == old[1] and dest == self.FREE: # move one place backward into a free space
+            elif new[0] == old[0] + 1 and new[1] == old[1]: # move one place backward
                 return self.VALID
-            elif new[0] == old[0] and new[1] == old[1] - 1 and dest == self.FREE: # move one place left into a free space
+            elif new[0] == old[0] and new[1] == old[1] - 1: # move one place left
                 return self.VALID
-            elif new[0] == old[0] and new[1] == old[1] + 1 and dest == self.FREE: # move one place right into a free space
+            elif new[0] == old[0] and new[1] == old[1] + 1: # move one place right
                 return self.VALID
-            elif new[0] == old[0] - 1 and new[1] == old[1] - 1 and dest == self.FREE: # move one place forward left into a free space
+            elif new[0] == old[0] - 1 and new[1] == old[1] - 1: # move one place forward left
                 return self.VALID
-            elif new[0] == old[0] - 1 and new[1] == old[1] + 1 and dest == self.FREE: # move one place forward right into a free space
+            elif new[0] == old[0] - 1 and new[1] == old[1] + 1: # move one place forward right
                 return self.VALID
-            elif new[0] == old[0] + 1 and new[1] == old[1] - 1 and dest == self.FREE: # move one place backward left into a free space
+            elif new[0] == old[0] + 1 and new[1] == old[1] - 1: # move one place backward left
                 return self.VALID
-            elif new[0] == old[0] + 1 and new[1] == old[1] + 1 and dest == self.FREE: # move one place backward right into a free space
+            elif new[0] == old[0] + 1 and new[1] == old[1] + 1: # move one place backward right
                 return self.VALID
             else:
                 return self.INVALID
