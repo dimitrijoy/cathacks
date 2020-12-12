@@ -9,11 +9,11 @@ CAPTION = "Chess"
 pygame.display.set_caption(CAPTION)
 
 # window dimens
-DIMENS = WIDTH, HEIGHT = ((800,800))
+DIMENS = WIDTH, HEIGHT = ((1000,800))
 screenPieces = screen = pygame.display.set_mode(DIMENS)
 
 # colors
-WHITE = (192, 192, 192)
+WHITE = (242, 242, 242)
 BLACK = (40, 120, 40)
 
 # game attrs
