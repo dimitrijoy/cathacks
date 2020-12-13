@@ -42,7 +42,7 @@ class Chess:
     # generates legal moves for a particular pawn
     def generate_pawn_moves(self, color, pos):
         legal_moves = []
-        if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1] and self.at(pos[0]-self.__turn, pos[1]) == self.__board.FREE: # move one place forward into a free space
+        if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and self.at(pos[0]-self.__turn, pos[1]) == self.__board.FREE: # move one place forward into a free space
             legal_moves.append((pos[0]-self.__turn, pos[1]))
         if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS and self.at(pos[0]-self.__turn, pos[1]-1) != self.__board.FREE and self.at(pos[0]-self.__turn, pos[1]-1).get_color() != color: # diagonal left offensive move
             legal_moves.append((pos[0]-self.__turn, pos[1]-1))
