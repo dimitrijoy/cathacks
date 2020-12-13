@@ -13,46 +13,60 @@ class Chess:
     def at(self, row, col):
         return self.__board.at(row, col)
     
+    # generates all legal moves for every piece on the board
     def generate_legal_moves(self):
         for i in range(self.__board.DIMENS):
             for j in range(self.__board.DIMENS):
                 # finished other funcs first
                 piece = self.at(i, j)
     
+    # generates legal moves for a particular knight
     def generate_knight_moves(self, color, pos):
         legal_moves = []
+        if self.at(pos[0]-2, pos[1]-1).get_color() != color and pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8: # up and left
+            legal_moves.append((pos[0]-2, pos[1]-1))
+        # do rest
+        return legal_moves
 
     # generates legal moves for a particular bishop
     def generate_bishop_moves(self, color, pos):
         legal_moves = []
         for i in range(1, self.__board.DIMENS): # up and right
-            piece = self.at(pos[0]-i, pos[1]+i) 
-            if piece != self.__board.FREE: # not a free space
-                if color != piece.get_color(): # opponent's piece
-                    legal_moves.append((pos[0]-i, pos[1]+i))
-                break
-            legal_moves.append((pos[0]-i, pos[1]+i))
+            if pos[0]-i >= 0 and pos[0]-i < self.__board.DIMENS and pos[1]+i >= 0 and pos[1]+i < self.__board.DIMENS:
+                piece = self.at(pos[0]-i, pos[1]+i) 
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
+                        legal_moves.append((pos[0]-i, pos[1]+i))
+                    break
+                legal_moves.append((pos[0]-i, pos[1]+i))
+            break
         for i in range(1, self.__board.DIMENS): # up and left
-            piece = self.at(pos[0]-i, pos[1]-i) 
-            if piece != self.__board.FREE: # not a free space
-                if color != piece.get_color(): # opponent's piece
-                    legal_moves.append((pos[0]-i, pos[1]-i))
-                break
-            legal_moves.append((pos[0]-i, pos[1]-i))
+            if pos[0]-i >= 0 and pos[0]-i < self.__board.DIMENS and pos[1]-i >= 0 and pos[1]-i < self.__board.DIMENS:
+                piece = self.at(pos[0]-i, pos[1]-i) 
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
+                        legal_moves.append((pos[0]-i, pos[1]-i))
+                    break
+                legal_moves.append((pos[0]-i, pos[1]-i))
+            break
         for i in range(1, self.__board.DIMENS): # down and right
-            piece = self.at(pos[0]+i, pos[1]+i) 
-            if piece != self.__board.FREE: # not a free space
-                if color != piece.get_color(): # opponent's piece
-                    legal_moves.append((pos[0]+i, pos[1]+i))
-                break
-            legal_moves.append((pos[0]+i, pos[1]+i))
+            if pos[0]+i >= 0 and pos[0]+i < self.__board.DIMENS and pos[1]+i >= 0 and pos[1]+i < self.__board.DIMENS:
+                piece = self.at(pos[0]+i, pos[1]+i) 
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
+                        legal_moves.append((pos[0]+i, pos[1]+i))
+                    break
+                legal_moves.append((pos[0]+i, pos[1]+i))
+            break
         for i in range(1, self.__board.DIMENS): # down and left
-            piece = self.at(pos[0]+i, pos[1]-i) 
-            if piece != self.__board.FREE: # not a free space
-                if color != piece.get_color(): # opponent's piece
+                if pos[0]+i >= 0 and pos[0]+i < self.__board.DIMENS and pos[1]-i >= 0 and pos[1]-i < self.__board.DIMENS:
+                    piece = self.at(pos[0]+i, pos[1]-i) 
+                    if piece != self.__board.FREE: # not a free space
+                        if color != piece.get_color(): # opponent's piece
+                            legal_moves.append((pos[0]+i, pos[1]-i))
+                        break
                     legal_moves.append((pos[0]+i, pos[1]-i))
                 break
-            legal_moves.append((pos[0]+i, pos[1]-i))
         return legal_moves
 
     def move(self, old, new):
