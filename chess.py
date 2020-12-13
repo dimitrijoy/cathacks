@@ -4,7 +4,7 @@ import copy
 # plays against the human in chess
 class AI:
     INF = 10 ** 3
-    DEPTH = 0 # moves to look ahead into the future
+    DEPTH = 2 # moves to look ahead into the future
     
     # determines the next move of the ai
     def next_move(self, chess):
@@ -15,7 +15,7 @@ class AI:
                 if piece != ' ' and piece.get_color() == chess.BLACK:
                     for k in piece.get_legal_moves():
                         dup = copy.deepcopy(chess); dup.move((i,j), k)
-                        score = self.minimax(dup, 0, -self.INF, self.INF, False)
+                        score = self.minimax(dup, self.DEPTH, -self.INF, self.INF, False)
                         del dup
                         if score > best_score:
                             best_score = score
@@ -26,39 +26,37 @@ class AI:
     # helps the ai decide if the move is worth making
     def minimax(self, chess, depth, alpha, beta, maximizing):
         # end condition
-        if depth > self.DEPTH:
+        if depth == 0:
             return -chess.evaluate()
         
         if maximizing: # maximizing player (ai)
-            best_score = -self.INF
+            value = -self.INF
             for i in range(chess.dimens()):
                 for j in range(chess.dimens()):
                     piece = chess.at(i, j)
                     if piece != ' ':
                         for k in piece.get_legal_moves():
                             dup = copy.deepcopy(chess); dup.move((i,j), k)
-                            score = self.minimax(dup, depth + 1, alpha, beta, False)
+                            value = max(value, self.minimax(dup, depth - 1, alpha, beta, False))
                             del dup
-                            best_score = max(best_score, score)
-                            alpha = max(alpha, best_score)
-                            if alpha >= beta:
+                            alpha = max(alpha, value)
+                            if alpha <= beta:
                                 break # stop searching
-            return best_score
+            return value
         else: # minimizing player (human)
-            best_score = self.INF
+            value = self.INF
             for i in range(chess.dimens()):
                 for j in range(chess.dimens()):
                     piece = chess.at(i, j)
                     if piece != ' ':
                         for k in piece.get_legal_moves():
                             dup = copy.deepcopy(chess); dup.move((i,j), k)
-                            score = self.minimax(dup, depth + 1, alpha, beta, True)
+                            value = min(value, self.minimax(dup, depth - 1, alpha, beta, True))
                             del dup
-                            best_score = min(best_score, score)
-                            beta = min(beta, best_score)
-                            if beta <= alpha:
+                            beta = min(beta, value)
+                            if beta >= alpha:
                                 break # stop searching
-            return best_score
+            return value
 
 # upholds the rules of chess on the board
 # computes legality of moves
@@ -336,34 +334,40 @@ class Chess:
     # returns True on success and False otherwise for the caller to handle
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
-        # determines if src/dest is free or occupied by black/white
-        src_color, dest_color = self.__board.FREE, self.__board.FREE
         if src != self.__board.FREE: # not a free space
             src_color, dest_color = src.get_color(), self.__board.FREE if dest == self.__board.FREE else dest.get_color()
             if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
-                self.__board.move(old, new); self.next()
+                # assume the move is legal until check
+                self.__board.move(old, new)
+                self.next()
                 self.generate_legal_moves()
-                if self.in_check(src_color): # in check
+
+                # fails in check
+                if self.in_check(src_color):
+                    # reverts the move
                     self.__board.move(new, old)
-                    self.__board.place(dest, new[0], new[1]); self.next()
+                    self.__board.place(dest, new[0], new[1])
+                    self.next()
                     self.generate_legal_moves()
-                    return False # invalid
+                    return False # does not stop check
+                
+                # updates the game evaluation
                 if dest_color == self.WHITE:
                     self.__evaluation -= dest.get_score()
                 elif dest_color == self.BLACK:
                     self.__evaluation += dest.get_score()
-                print(self.__evaluation)
-                return True # success
-        return False # invalid
+                
+                return True # success!
+        else:
+            return False # invalid
         
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
-        self.generate_legal_moves()
     
     # starts the game
     def start(self):
-        self.generate_legal_moves()
+        self.generate_legal_moves() # initial legal moves
     
     # returns the turn
     def turn(self):

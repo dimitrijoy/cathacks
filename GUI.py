@@ -1,8 +1,7 @@
 # dependencies
 from chess import AI, Chess
-import pygame
-import time
 from pygame import mixer
+import pygame, time, threading
 
 pygame.init() # initializes the game
 
