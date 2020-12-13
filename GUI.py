@@ -4,13 +4,13 @@ from pygame import mixer
 import pygame, time, threading
 
 pygame.init() # initializes the game
-'''
+
 # sounds
 # bg music
 mixer.music.load('Sound/backgroundChristmas.mp3')
 mixer.music.play(-1)
 mixer.music.set_volume(.1)
-'''
+
 # chess piece moving
 move = pygame.mixer.Sound('Sound/move.wav')
 pygame.mixer.Sound.set_volume(move, .1)
