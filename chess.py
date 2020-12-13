@@ -8,6 +8,8 @@ class AI:
     
     # determines the next move of the ai
     def next_move(self, chess):
+        if self.__turns == 
+
         best_score, next = -self.INF, None
         for i in range(chess.dimens()):
             for j in range(chess.dimens()):
@@ -72,6 +74,7 @@ class Chess:
         self.__evaluation = 0
         self.__state = self.ONGOING
         self.__turn = self.WHITE # white always goes first
+        self.__turns = 0
         self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
                                 (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)] 
     
@@ -359,6 +362,7 @@ class Chess:
                 elif dest_color == self.BLACK:
                     self.__evaluation += dest.get_score()
                 
+                self.__turns += 1
                 return True # success!
             else: # need to account for pawn's first move
                 if src.get_type() == 'p' and old in self.__unmoved_pawns:
@@ -374,6 +378,10 @@ class Chess:
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
+    
+    # places a piece
+    def place(self, piece, i, j):
+        self.__board.place(piece, i, j)
     
     # starts the game
     def start(self):
