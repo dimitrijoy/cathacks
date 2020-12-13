@@ -6,12 +6,12 @@ from pygame import mixer
 
 pygame.init() # initializes the game
 
-# Sounds
-# Background Music
+# sounds
+# bg music
 mixer.music.load('backgroundChristmas.mp3')
 mixer.music.play(-1)
 mixer.music.set_volume(.1)
-# Chess piece moving
+# chess piece moving
 move = pygame.mixer.Sound('move.wav')
 pygame.mixer.Sound.set_volume(move, .1)
 
@@ -62,7 +62,7 @@ def create_board():
             # black then white
             pygame.draw.rect(screenPieces, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
-    # Player's Side
+    # player's side
     pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
     pygame.draw.rect(screenPieces, GREEN, [850,50,100,100])
     pygame.draw.rect(screenPieces, GREEN, [850,650,100,100])
