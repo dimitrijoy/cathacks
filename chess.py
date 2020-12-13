@@ -111,6 +111,7 @@ class Chess:
                     legal_moves.append((pos[0]+i, pos[1]-i))
                 break
         return legal_moves
+<<<<<<< HEAD
     
     # generates legal moves for a particular knight
     def generate_rook_moves(self, color, pos):
@@ -149,6 +150,9 @@ class Chess:
                 legal_moves.append((pos[0], pos[1]-i))
         return legal_moves
   
+=======
+
+>>>>>>> dd18f718183bb0f20558f0940b14a2a88d1ea669
     # generates legal moves for a particular queen
     def generate_queen_moves(self, color, pos):
         legal_moves = []
