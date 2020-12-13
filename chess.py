@@ -45,9 +45,9 @@ class Chess:
         if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1] and self.at(pos[0]-self.__turn, pos[1]) == self.__board.FREE: # move one place forward into a free space
             legal_moves.append((pos[0]-self.__turn, pos[1]))
         if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS and self.at(pos[0]-self.__turn, pos[1]-1) != self.__board.FREE and self.at(pos[0]-self.__turn, pos[1]-1).get_color() != color: # diagonal left offensive move
-            legal_moves.append(pos[0]-self.__turn, pos[1]-1)
+            legal_moves.append((pos[0]-self.__turn, pos[1]-1))
         if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS and self.at(pos[0]-self.__turn, pos[1]+1) != self.__board.FREE and self.at(pos[0]-self.__turn, pos[1]+1).get_color() != color: # diagonal right offensive move
-            legal_moves.append(pos[0]-self.__turn, pos[1]+1)
+            legal_moves.append((pos[0]-self.__turn, pos[1]+1))
         return legal_moves
 
     # generates legal moves for a particular knight
@@ -250,7 +250,6 @@ class Chess:
         # determines if src/dest is free or occupied by black/white
         src_color, dest_color = self.__board.FREE, self.__board.FREE
         if src != self.__board.FREE: # not a free space
-            print(src)
             src_color, dest_color = src.get_color(), self.__board.FREE if dest == self.__board.FREE else dest.get_color()
             if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
                 self.__board.move(old, new)
