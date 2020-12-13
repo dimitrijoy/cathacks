@@ -17,8 +17,8 @@ class Chess:
     def generate_legal_moves(self):
         for i in range(self.__board.DIMENS):
             for j in range(self.__board.DIMENS):
-                # finished other funcs first
-                piece = self.at(i, j)
+                if self.at(i, j) != self.__board.FREE:
+                    piece = self.at(i, j)
     
     # generates legal moves for a particular knight
     def generate_knight_moves(self, color, pos):
