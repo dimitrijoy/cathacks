@@ -1,4 +1,4 @@
-from Board import board
+from board import Board
 
 # upholds the rules of chess on the board
 # computes legality of moves
