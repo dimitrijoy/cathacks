@@ -14,7 +14,9 @@ class AI:
                 piece = chess.at(i, j)
                 if piece != ' ' and piece.get_color() == chess.BLACK:
                     for k in piece.get_legal_moves():
-                        dup = copy.deepcopy(chess); dup.move((i,j), k)
+                        dup = copy.deepcopy(chess)
+                        if not dup.move((i,j), k):
+                            continue # run away! (in check)
                         score = self.minimax(dup, self.DEPTH, -self.INF, self.INF, False)
                         del dup
                         if score > best_score:
@@ -358,6 +360,14 @@ class Chess:
                     self.__evaluation += dest.get_score()
                 
                 return True # success!
+            else: # need to account for pawn's first move
+                if src.get_type() == 'p' and old in self.__unmoved_pawns:
+                    if new[0] == old[0]-2*self.__turn and new[1] == old[1] and dest == self.__board.FREE:
+                        self.__board.move(old, new)
+                        self.next()
+                        self.generate_legal_moves()
+                        return True # success!
+                return False # not a pawn's first move
         else:
             return False # invalid
         
