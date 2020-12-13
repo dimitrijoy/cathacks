@@ -1,5 +1,4 @@
 # dependencies
-from board import Board
 from chess import Chess
 import pygame
 import time
@@ -19,7 +18,7 @@ WHITE = (242, 242, 242)
 BLACK = (40, 120, 40)
 
 # game attrs
-board = Board()
+chess = Chess()
 b = pygame.transform.scale(pygame.image.load("images/blackBishopElf.png"),(100,100))
 p = pygame.transform.scale(pygame.image.load("images/blackPawnElf.png"),(100,100))
 r = pygame.transform.scale(pygame.image.load("images/blackRookSanta.png"),(100,100))
@@ -41,21 +40,27 @@ pieces = {'p': p, 'P': P, 'r': r, 'R': R, 'k': k, 'K': K,
 
 # displays the game board
 def create_board():
-    for i in range(board.DIMENS):
-        for j in range(board.DIMENS):
-            # White then Black
+    for i in range(chess.dimens()):
+        for j in range(chess.dimens()):
+            # white then black
             pygame.draw.rect(screenPieces, WHITE, [(i*2)*100, (2*j)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i-1)*100, (2*j)*100, 100, 100])
-            # Black then White
+            # black then white
             pygame.draw.rect(screenPieces, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
 
 # updates board after moves
 def update_board():
     create_board()
-    for i in range(board.DIMENS):
-            for j in range(board.DIMENS):
-                screenPieces.blit(pieces[board.at(i,j)], ((j*100), (i*100))) 
+    for i in range(chess.dimens()):
+            for j in range(chess.dimens()):
+                if chess.at(i, j) == ' ':
+                    screenPieces.blit(pieces[chess.at(i,j)], ((j*100), (i*100)))
+                else:
+                    type = chess.at(i,j).get_type()
+                    if chess.at(i,j).get_color() == chess.WHITE:
+                        type = type.upper()
+                    screenPieces.blit(pieces[type], ((j*100), (i*100)))
 
 update_board() # init
 while True:
@@ -66,16 +71,18 @@ while True:
             coordinates_init = pygame.mouse.get_pos()
             x_init = coordinates_init[1] // 100
             y_init = coordinates_init[0] // 100
+        '''
         elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
             tempCoordinates = pygame.mouse.get_pos()
             x_temp = tempCoordinates[1]
             y_temp = tempCoordinates[0]
-            screenPieces.blit(pieces[board.at(x_init,y_init)], (y_temp,x_temp))
-        elif event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
+            screenPieces.blit(pieces[chess.at(x_init,y_init)], (y_temp,x_temp))
+        '''
+        if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
             coordinates_fin = pygame.mouse.get_pos()
             x_fin = coordinates_fin[1] // 100
             y_fin = coordinates_fin[0] // 100
-            board.move((x_init, y_init), (x_fin, y_fin))
+            chess.move((x_init, y_init), (x_fin, y_fin))
             update_board()
     
         # displays GUI
