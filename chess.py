@@ -266,6 +266,8 @@ class Chess:
             legal_moves.append((pos[0]+1, pos[1]-1))
         return legal_moves
 
+    # moves a specified piece
+    # returns True on success and False otherwise for the caller to handle
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
         # determines if src/dest is free or occupied by black/white
@@ -275,6 +277,8 @@ class Chess:
             if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
                 self.__board.move(old, new)
                 self.next() # next turn
+                return True # success
+        return False # invalid
         
     # next turn
     def next(self):
