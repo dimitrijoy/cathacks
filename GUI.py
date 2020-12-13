@@ -7,8 +7,9 @@ from pygame import mixer
 pygame.init() # initializes the game
 
 # Sounds
-mixer.music.load('background.mp3')
-mixer.music.play(-1)
+#mixer.music.load('background.mp3')
+#mixer.music.play(-1)
+move = pygame.mixer.Sound('move.wav')
 
 # window caption
 CAPTION = "Chess"
@@ -88,6 +89,7 @@ while True:
             x_fin = coordinates_fin[1] // 100
             y_fin = coordinates_fin[0] // 100
             chess.move((x_init, y_init), (x_fin, y_fin))
+            pygame.mixer.Sound.play(move)
             update_board()
     
         # displays GUI
