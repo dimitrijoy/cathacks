@@ -67,12 +67,14 @@ def create_board():
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
     # player's side
     pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
+    pygame.draw.rect(screenPieces, GREEN, [845, 375, 150, 50])
     pygame.draw.rect(screenPieces, GREEN, [865,50,100,100])
     pygame.draw.rect(screenPieces, GREEN, [865,650,100,100])
     screenPieces.blit(player,(865,650))
     screenPieces.blit(computer,(865,50))
     screenPieces.blit(wreath,(780,-35))
     screenPieces.blit(wreath,(780,375))
+    
 
 # updates board after moves
 def update_board():
@@ -86,12 +88,25 @@ def update_board():
                     if chess.at(i,j).get_color() == chess.WHITE:
                         type = type.upper()
                     screenPieces.blit(pieces[type], ((j*100), (i*100)))
+    screen.blit(font.render(text, True, (255, 255, 255)), (876, 385))
+
+clock = pygame.time.Clock()
+
+counter, text = 0, '0'.rjust(3)
+pygame.time.set_timer(pygame.USEREVENT, 1000)
+font = pygame.font.SysFont('Consolas', 30)
 
 update_board() # init
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exits game
             exit()
+        if event.type == pygame.USEREVENT: 
+            counter += 1
+            text = str(counter).rjust(3)
+            update_board()      
+        clock.tick(60)   
+
         if chess.turn() == chess.WHITE:
             if event.type == pygame.MOUSEBUTTONDOWN: # gets cursor coordinates on mouse button down to select piece
                 coordinates_init = pygame.mouse.get_pos()
