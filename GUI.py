@@ -4,7 +4,6 @@ import pygame
 import time
 from pygame import mixer
 
-
 pygame.init() # initializes the game
 
 # Sounds
@@ -21,16 +20,19 @@ CAPTION = "Chess"
 pygame.display.set_caption(CAPTION)
 
 # window dimens
-DIMENS = WIDTH, HEIGHT = ((800,800))
+DIMENS = WIDTH, HEIGHT = ((1000,800))
 screenPieces = screen = pygame.display.set_mode(DIMENS)
 
 # colors
 WHITE = (242, 242, 242)
 BLACK = (40, 120, 40)
 SILVER = (200,200,200)
+GREEN = (0, 0, 0)
 
 # game attrs
 chess = Chess(); chess.start()
+player = pygame.transform.scale(pygame.image.load("images/Player.png"),(100,100))
+computer = pygame.transform.scale(pygame.image.load("images/Computer.png"),(100,100))
 b = pygame.transform.scale(pygame.image.load("images/blackBishopElf.png"),(100,100))
 p = pygame.transform.scale(pygame.image.load("images/blackPawnElf.png"),(100,100))
 r = pygame.transform.scale(pygame.image.load("images/blackRookSanta.png"),(100,100))
@@ -60,7 +62,12 @@ def create_board():
             # black then white
             pygame.draw.rect(screenPieces, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
-    #pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
+    # Player's Side
+    pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
+    pygame.draw.rect(screenPieces, GREEN, [850,50,100,100])
+    pygame.draw.rect(screenPieces, GREEN, [850,650,100,100])
+    screenPieces.blit(player,(850,650))
+    screenPieces.blit(computer,(850,50))
 
 # updates board after moves
 def update_board():
