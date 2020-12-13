@@ -4,33 +4,33 @@ import copy
 # plays against the human in chess
 class AI:
     INF = 10 ** 3
-    DEPTH = 2 # moves to look ahead into the future
+    DEPTH = 1 # moves to look ahead into the future
 
     def __init__(self):
         pass
     
     # determines the next move of the ai
     def next_move(self, chess):
-        best_score, best_move = -self.INF, None
+        best_score, next = -self.INF, None
         for i in range(chess.dimens()):
             for j in range(chess.dimens()):
                 piece = chess.at(i, j)
                 if piece != ' ' and piece.get_color() == chess.BLACK:
                     for k in piece.get_legal_moves():
-                        dup = copy.deepcopy(chess); dup.move(i, j)
+                        dup = copy.deepcopy(chess); dup.move((i,j), k)
                         score = self.minimax(dup, 0, -self.INF, self.INF, False)
                         del dup
                         if score > best_score:
                             best_score = score
-                            best_move = (i, j)
-        return best_move
+                            next = ((i,j), k)
+        return next
     
     # evaluates the score of a particular move
     # helps the ai decide if the move is worth making
     def minimax(self, chess, depth, alpha, beta, maximizing):
         # end condition
         if depth > self.DEPTH:
-            return chess.evaluate()
+            return -chess.evaluate()
         
         if maximizing: # maximizing player (ai)
             best_score = -self.INF
@@ -38,13 +38,14 @@ class AI:
                 for j in range(chess.dimens()):
                     piece = chess.at(i, j)
                     if piece != ' ':
-                        dup = copy.deepcopy(chess); dup.move(i, j)
-                        score = self.minimax(dup, depth + 1, alpha, beta, False)
-                        del dup
-                        best_score = max(best_score, score)
-                        alpha = max(alpha, best_score)
-                        if alpha >= beta:
-                            break # stop searching
+                        for k in piece.get_legal_moves():
+                            dup = copy.deepcopy(chess); dup.move((i,j), k)
+                            score = self.minimax(dup, depth + 1, alpha, beta, False)
+                            del dup
+                            best_score = max(best_score, score)
+                            alpha = max(alpha, best_score)
+                            if alpha >= beta:
+                                break # stop searching
             return best_score
         else: # minimizing player (human)
             best_score = self.INF
@@ -52,16 +53,15 @@ class AI:
                 for j in range(chess.dimens()):
                     piece = chess.at(i, j)
                     if piece != ' ':
-                        dup = copy.deepcopy(chess); dup.move(i, j)
-                        score = self.minimax(dup, depth + 1, alpha, beta, True)
-                        del dup
-                        best_score = min(best_score, score)
-                        beta = min(beta, best_score)
-                        if beta <= alpha:
-                            break # stop searching
+                        for k in piece.get_legal_moves():
+                            dup = copy.deepcopy(chess); dup.move((i,j), k)
+                            score = self.minimax(dup, depth + 1, alpha, beta, True)
+                            del dup
+                            best_score = min(best_score, score)
+                            beta = min(beta, best_score)
+                            if beta <= alpha:
+                                break # stop searching
             return best_score
-
-
 
 # upholds the rules of chess on the board
 # computes legality of moves
@@ -369,3 +369,7 @@ class Chess:
     # starts the game
     def start(self):
         self.generate_legal_moves()
+    
+    # returns the turn
+    def turn(self):
+        return self.__turn

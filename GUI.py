@@ -1,5 +1,5 @@
 # dependencies
-from chess import Chess
+from chess import AI, Chess
 import pygame
 import time
 from pygame import mixer
@@ -30,6 +30,7 @@ SILVER = (200,200,200)
 GREEN = (0, 0, 0)
 
 # game attrs
+ai = AI()
 chess = Chess(); chess.start()
 player = pygame.transform.scale(pygame.image.load("images/Player.png"),(100,100))
 computer = pygame.transform.scale(pygame.image.load("images/Computer.png"),(100,100))
@@ -91,25 +92,29 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exits game
             exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN: # gets cursor coordinates on mouse button down to select piece
-            coordinates_init = pygame.mouse.get_pos()
-            x_init = coordinates_init[1] // 100
-            y_init = coordinates_init[0] // 100
-        '''
-        elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
-            tempCoordinates = pygame.mouse.get_pos()
-            x_temp = tempCoordinates[1]
-            y_temp = tempCoordinates[0]
-            screenPieces.blit(pieces[chess.at(x_init,y_init)], (y_temp,x_temp))
-        '''
-        if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
-            coordinates_fin = pygame.mouse.get_pos()
-            x_fin = coordinates_fin[1] // 100
-            y_fin = coordinates_fin[0] // 100
-            moveTrue = chess.move((x_init, y_init), (x_fin, y_fin))
-            if moveTrue:
-                pygame.mixer.Sound.play(move)
-            update_board()
+        if chess.turn() == chess.WHITE:
+            if event.type == pygame.MOUSEBUTTONDOWN: # gets cursor coordinates on mouse button down to select piece
+                coordinates_init = pygame.mouse.get_pos()
+                x_init = coordinates_init[1] // 100
+                y_init = coordinates_init[0] // 100
+            '''
+            elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
+                tempCoordinates = pygame.mouse.get_pos()
+                x_temp = tempCoordinates[1]
+                y_temp = tempCoordinates[0]
+                screenPieces.blit(pieces[chess.at(x_init,y_init)], (y_temp,x_temp))
+            '''
+            if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
+                coordinates_fin = pygame.mouse.get_pos()
+                x_fin = coordinates_fin[1] // 100
+                y_fin = coordinates_fin[0] // 100
+                moveTrue = chess.move((x_init, y_init), (x_fin, y_fin))
+                if moveTrue:
+                    pygame.mixer.Sound.play(move)
+                update_board()
+        else:
+            next = ai.next_move(chess)
+            chess.move(next[0], next[1])
     
         # displays GUI
         pygame.display.flip()
