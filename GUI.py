@@ -4,6 +4,7 @@ import pygame
 import time
 from pygame import mixer
 
+
 pygame.init() # initializes the game
 
 # Sounds
@@ -26,6 +27,7 @@ screenPieces = screen = pygame.display.set_mode(DIMENS)
 # colors
 WHITE = (242, 242, 242)
 BLACK = (40, 120, 40)
+SILVER = (200,200,200)
 
 # game attrs
 chess = Chess(); chess.start()
@@ -58,6 +60,7 @@ def create_board():
             # black then white
             pygame.draw.rect(screenPieces, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
+    #pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
 
 # updates board after moves
 def update_board():
