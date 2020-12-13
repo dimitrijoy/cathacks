@@ -4,10 +4,7 @@ import copy
 # plays against the human in chess
 class AI:
     INF = 10 ** 3
-    DEPTH = 1 # moves to look ahead into the future
-
-    def __init__(self):
-        pass
+    DEPTH = 0 # moves to look ahead into the future
     
     # determines the next move of the ai
     def next_move(self, chess):
@@ -72,6 +69,7 @@ class Chess:
     def __init__(self):
         self.__board = Board()
         self.__check = {self.BLACK: False, self.WHITE: False}
+        self.__evaluation = 0
         self.__state = self.ONGOING
         self.__turn = self.WHITE # white always goes first
         self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
@@ -81,17 +79,9 @@ class Chess:
     def at(self, row, col):
         return self.__board.at(row, col)
     
-    # evaluates the board with respect to []
+    # returns the current evaluation of the board
     def evaluate(self):
-        score = 0
-        for i in range(self.__board.DIMENS):
-            for j in range(self.__board.DIMENS):
-                if self.at(i, j) != self.__board.FREE:
-                    if self.at(i, j).get_color() == self.WHITE:
-                        score += self.at(i, j).get_score()
-                    else:
-                        score -= self.at(i, j).get_score()
-        return score
+        return self.__evaluation
     
     # finds if someone is in check
     def in_check(self, color):
@@ -358,6 +348,11 @@ class Chess:
                     self.__board.place(dest, new[0], new[1]); self.next()
                     self.generate_legal_moves()
                     return False # invalid
+                if dest_color == self.WHITE:
+                    self.__evaluation -= dest.get_score()
+                elif dest_color == self.BLACK:
+                    self.__evaluation += dest.get_score()
+                print(self.__evaluation)
                 return True # success
         return False # invalid
         
