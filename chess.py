@@ -1,4 +1,3 @@
-from board import Board
 
 # upholds the rules of chess on the board
 # computes legality of moves
@@ -111,7 +110,7 @@ class Chess:
                     legal_moves.append((pos[0]+i, pos[1]-i))
                 break
         return legal_moves
-<<<<<<< HEAD
+
     
     # generates legal moves for a particular knight
     def generate_rook_moves(self, color, pos):
@@ -150,9 +149,6 @@ class Chess:
                 legal_moves.append((pos[0], pos[1]-i))
         return legal_moves
   
-=======
-
->>>>>>> dd18f718183bb0f20558f0940b14a2a88d1ea669
     # generates legal moves for a particular queen
     def generate_queen_moves(self, color, pos):
         legal_moves = []
@@ -231,21 +227,21 @@ class Chess:
     # generates legal moves for a particular king
     def generate_king_moves(self, color, pos):
         legal_moves = []
-        if self.at(pos[0]-1, pos[1]).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS: # move one place forward
+        if (self.at(pos[0]-1, pos[1]) == self.__board.FREE or self.at(pos[0]-1, pos[1]).get_color() != color) and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS: # move one place forward
             legal_moves.append((pos[0]-2, pos[1]-1))
-        if pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and self.at(pos[0]+1, pos[1]).get_color() != color: # move one place backward
+        if (self.at(pos[0]+1, pos[1]) == self.__board.FREE or self.at(pos[0]+1, pos[1]).get_color() != color) and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS: # move one place backward
             legal_moves.append((pos[0]+1, pos[1]))
-        if self.at(pos[0], pos[1]-1).get_color() != color and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place left
+        if (self.at(pos[0], pos[1]-1) == self.__board.FREE or self.at(pos[0], pos[1]-1).get_color() != color) and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place left
             legal_moves.append((pos[0], pos[1]-1))
-        if self.at(pos[0], pos[1]+1).get_color() != color and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place right
+        if (self.at(pos[0], pos[1]+1) == self.__board.FREE or self.at(pos[0], pos[1]+1).get_color() != color) and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place right
             legal_moves.append((pos[0], pos[1]+1))
-        if self.at(pos[0]-1, pos[1]+1).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place up and right
+        if (self.at(pos[0]-1, pos[1]+1) == self.__board.FREE or self.at(pos[0]-1, pos[1]+1).get_color() != color) and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place up and right
             legal_moves.append((pos[0]-1, pos[1]+1))
-        if self.at(pos[0]-1, pos[1]-1).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place up and left
+        if (self.at(pos[0]-1, pos[1]-1) == self.__board.FREE or self.at(pos[0]-1, pos[1]-1).get_color() != color) and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place up and left
             legal_moves.append((pos[0]-1, pos[1]-1))
-        if self.at(pos[0]+1, pos[1]+1).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place down and right
+        if (self.at(pos[0]+1, pos[1]+1) == self.__board.FREE or self.at(pos[0]+1, pos[1]+1).get_color() != color) and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place down and right
             legal_moves.append((pos[0]+1, pos[1]+1))
-        if self.at(pos[0]+1, pos[1]-1).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place down and left
+        if (self.at(pos[0]+1, pos[1]-1) == self.__board.FREE or self.at(pos[0]+1, pos[1]-1).get_color() != color) and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place down and left
             legal_moves.append((pos[0]+1, pos[1]-1))
         return legal_moves
 
