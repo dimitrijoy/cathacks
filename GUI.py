@@ -7,8 +7,8 @@ from pygame import mixer
 pygame.init() # initializes the game
 
 # Sounds
-#mixer.music.load('background.mp3')
-#mixer.music.play(-1)
+mixer.music.load('backgroundChristmas.mp3')
+mixer.music.play(-1)
 move = pygame.mixer.Sound('move.wav')
 
 # window caption
