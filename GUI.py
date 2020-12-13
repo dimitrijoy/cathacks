@@ -116,8 +116,7 @@ while True:
                 if coordinates_init <= (800,800):
                     x_init = coordinates_init[1] // 100
                     y_init = coordinates_init[0] // 100
-                if chess.at(x_init, y_init) != ' ':
-                    
+               
             if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
                 coordinates_fin = pygame.mouse.get_pos()
                 if coordinates_fin <= (800,800):
