@@ -7,6 +7,7 @@ class Chess:
 
     def __init__(self):
         self.__board = Board()
+        self.__check = {self.BLACK: False, self.WHITE: False}
         self.__turn = self.WHITE # white always goes first
         self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
                                 (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)] 
@@ -14,6 +15,18 @@ class Chess:
     # returns piece at [row][col]
     def at(self, row, col):
         return self.__board.at(row, col)
+    
+    # finds if someone is in check
+    def in_check(self):
+        for i in range(self.__board.DIMENS):
+            for j in range(self.__board.DIMENS):
+                if self.at(i, j) != self.__board.FREE:
+                    piece = self.at(i, j)
+                    for k in piece.get_legal_moves():
+                        if self.at(k[0], k[1]) != self.__board.FREE and self.at(k[0], k[1]).get_type() == 'a':
+                            self.__check[k.get_color()] = True # in check
+                            return # stop iterating
+        self.__check[self.BLACK] = False; self.__check[self.WHITE] = False # otherwise, not in check
     
     # gets board dimens
     def dimens(self):
@@ -266,6 +279,7 @@ class Chess:
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
+        self.in_check()
         self.generate_legal_moves()
     
     # starts the game
