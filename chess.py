@@ -198,6 +198,28 @@ class Chess:
                 break
         return legal_moves
 
+        def generate_king_moves(self, color, pos):
+            legal_moves = []
+            if self.at(pos[0]-1, pos[1]).get_color() != color and pos[0]-1 >= 0: # move one place forward
+                legal_moves.append((pos[0]-2, pos[1]-1))
+            if self.at(pos[0]+1, pos[1]).get_color() != color and pos[0]-1 <= 8: # move one place backward
+                legal_moves.append((pos[0]+1, pos[1]))
+            if self.at(pos[0], pos[1]-1).get_color() != color and pos[1]-1 >= 0: # move one place left
+                legal_moves.append((pos[0], pos[1]-1))
+            if self.at(pos[0], pos[1]+1).get_color() != color and pos[0]-1 >= 0: # move one place right
+                legal_moves.append((pos[0], pos[1]+1))
+            if self.at(pos[0]-1, pos[1]+1).get_color() != color and pos[0]-1 >= 0 and pos[1] <= 8: # move one place up and right
+                legal_moves.append((pos[0]-1, pos[1]+1))
+            if self.at(pos[0]-1, pos[1]-1).get_color() != color and pos[0]-1 >= 0 and pos[1] >= 0: # move one place up and left
+                legal_moves.append((pos[0]-1, pos[1]-1))
+            if self.at(pos[0]+1, pos[1]+1).get_color() != color and pos[0]+1 <= 8 and pos[1] <= 8: # move one place down and right
+                legal_moves.append((pos[0]+1, pos[1]+1))
+            if self.at(pos[0]+1, pos[1]-1).get_color() != color and pos[0]+1 <= 8 and pos[1] >= 0: # move one place down and left
+                legal_moves.append((pos[0]+1, pos[1]-1))
+            return legal_moves
+            
+            
+
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
         # determines if src/dest is free or occupied by black/white
