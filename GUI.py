@@ -103,7 +103,9 @@ while True:
         if event.type == pygame.USEREVENT: 
             counter += 1
             text = str(counter).rjust(3)
-            update_board()      
+            update_board()
+            x_temp = 0
+            y_temp = 3
         clock.tick(60)   
 
         if chess.turn() == chess.WHITE:
@@ -113,13 +115,15 @@ while True:
                 if coordinates_init <= (800,800):
                     x_init = coordinates_init[1] // 100
                     y_init = coordinates_init[0] // 100
-            '''
+            
             elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
+                screenPieces.blit(FREE, (x_init,y_init))
                 tempCoordinates = pygame.mouse.get_pos()
                 x_temp = tempCoordinates[1]
                 y_temp = tempCoordinates[0]
-                screenPieces.blit(pieces[chess.at(x_init,y_init)], (y_temp,x_temp))
-            '''
+                screenPieces.blit(pieces[chess.at(x_init,y_init).get_type()], (y_temp-50,x_temp-50))
+                #update_board()
+
             if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
                 coordinates_fin = pygame.mouse.get_pos()
                 if coordinates_fin <= (800,800):
@@ -132,6 +136,6 @@ while True:
         else:
             next = ai.next_move(chess)
             chess.move(next[0], next[1])
-    
+
         # displays GUI
         pygame.display.flip()
