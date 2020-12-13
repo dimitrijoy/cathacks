@@ -123,7 +123,7 @@ while True:
                 x_temp = tempCoordinates[1]
                 y_temp = tempCoordinates[0]
                 if chess.at(x_init, y_init) != ' ':
-                    screenPieces.blit(pieces[chess.at(x_init,y_init-8).get_type()], (y_temp-50,x_temp-50))
+                    screenPieces.blit(pieces[chess.at(x_init,y_init-8).get_type().upper()], (y_temp-50,x_temp-50))
                 #update_board()
 
             if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
