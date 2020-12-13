@@ -4,10 +4,12 @@ from board import Board
 # computes legality of moves
 class Chess:
     BLACK, WHITE = -1, 1 # for managing turns
+    ONGOING, STALEMATE, VICTORY = 0, 1, 2
 
     def __init__(self):
         self.__board = Board()
         self.__check = {self.BLACK: False, self.WHITE: False}
+        self.__state = self.ONGOING
         self.__turn = self.WHITE # white always goes first
         self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
                                 (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)] 
@@ -17,16 +19,15 @@ class Chess:
         return self.__board.at(row, col)
     
     # finds if someone is in check
-    def in_check(self):
+    def in_check(self, color):
         for i in range(self.__board.DIMENS):
             for j in range(self.__board.DIMENS):
                 if self.at(i, j) != self.__board.FREE:
                     piece = self.at(i, j)
                     for k in piece.get_legal_moves():
                         if self.at(k[0], k[1]) != self.__board.FREE and self.at(k[0], k[1]).get_type() == 'a':
-                            self.__check[k.get_color()] = True # in check
-                            return # stop iterating
-        self.__check[self.BLACK] = False; self.__check[self.WHITE] = False # otherwise, not in check
+                            return self.at(k[0], k[1]).get_color() == color
+        return False
     
     # gets board dimens
     def dimens(self):
@@ -249,7 +250,7 @@ class Chess:
     def generate_king_moves(self, color, pos):
         legal_moves = []
         if pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and (self.at(pos[0]-1, pos[1]) == self.__board.FREE or self.at(pos[0]-1, pos[1]).get_color() != color): # move one place forward
-            legal_moves.append((pos[0]-2, pos[1]-1))
+            legal_moves.append((pos[0]-1, pos[1]))
         if pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and (self.at(pos[0]+1, pos[1]) == self.__board.FREE or self.at(pos[0]+1, pos[1]).get_color() != color): # move one place backward
             legal_moves.append((pos[0]+1, pos[1]))
         if pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS and (self.at(pos[0], pos[1]-1) == self.__board.FREE or self.at(pos[0], pos[1]-1).get_color() != color): # move one place left
@@ -275,15 +276,19 @@ class Chess:
         if src != self.__board.FREE: # not a free space
             src_color, dest_color = src.get_color(), self.__board.FREE if dest == self.__board.FREE else dest.get_color()
             if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
-                self.__board.move(old, new)
-                self.next() # next turn
+                self.__board.move(old, new); self.next()
+                self.generate_legal_moves()
+                if self.in_check(src_color): # in check
+                    self.__board.move(new, old)
+                    self.__board.place(dest, new[0], new[1]); self.next()
+                    self.generate_legal_moves()
+                    return False # invalid
                 return True # success
         return False # invalid
         
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
-        self.in_check()
         self.generate_legal_moves()
     
     # starts the game
