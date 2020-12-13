@@ -2,8 +2,13 @@
 from chess import Chess
 import pygame
 import time
+from pygame import mixer
 
 pygame.init() # initializes the game
+
+# Sounds
+mixer.music.load('background.mp3')
+mixer.music.play(-1)
 
 # window caption
 CAPTION = "Chess"
