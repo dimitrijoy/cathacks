@@ -1,4 +1,67 @@
 from board import Board
+import copy
+
+# plays against the human in chess
+class AI:
+    INF = 10 ** 3
+    DEPTH = 2 # moves to look ahead into the future
+
+    def __init__(self):
+        pass
+    
+    # determines the next move of the ai
+    def next_move(self, chess):
+        best_score, best_move = -self.INF, None
+        for i in range(chess.dimens()):
+            for j in range(chess.dimens()):
+                piece = chess.at(i, j)
+                if piece != ' ' and piece.get_color() == chess.BLACK:
+                    for k in piece.get_legal_moves():
+                        dup = copy.deepcopy(chess); dup.move(i, j)
+                        score = self.minimax(dup, 0, -self.INF, self.INF, False)
+                        del dup
+                        if score > best_score:
+                            best_score = score
+                            best_move = (i, j)
+        return best_move
+    
+    # evaluates the score of a particular move
+    # helps the ai decide if the move is worth making
+    def minimax(self, chess, depth, alpha, beta, maximizing):
+        # end condition
+        if depth > self.DEPTH:
+            return chess.evaluate()
+        
+        if maximizing: # maximizing player (ai)
+            best_score = -self.INF
+            for i in range(chess.dimens()):
+                for j in range(chess.dimens()):
+                    piece = chess.at(i, j)
+                    if piece != ' ':
+                        dup = copy.deepcopy(chess); dup.move(i, j)
+                        score = self.minimax(dup, depth + 1, alpha, beta, False)
+                        del dup
+                        best_score = max(best_score, score)
+                        alpha = max(alpha, best_score)
+                        if alpha >= beta:
+                            break # stop searching
+            return best_score
+        else: # minimizing player (human)
+            best_score = self.INF
+            for i in range(chess.dimens()):
+                for j in range(chess.dimens()):
+                    piece = chess.at(i, j)
+                    if piece != ' ':
+                        dup = copy.deepcopy(chess); dup.move(i, j)
+                        score = self.minimax(dup, depth + 1, alpha, beta, True)
+                        del dup
+                        best_score = min(best_score, score)
+                        beta = min(beta, best_score)
+                        if beta <= alpha:
+                            break # stop searching
+            return best_score
+
+
 
 # upholds the rules of chess on the board
 # computes legality of moves
@@ -17,6 +80,18 @@ class Chess:
     # returns piece at [row][col]
     def at(self, row, col):
         return self.__board.at(row, col)
+    
+    # evaluates the board with respect to []
+    def evaluate(self):
+        score = 0
+        for i in range(self.__board.DIMENS):
+            for j in range(self.__board.DIMENS):
+                if self.at(i, j) != self.__board.FREE:
+                    if self.at(i, j).get_color() == self.WHITE:
+                        score += self.at(i, j).get_score()
+                    else:
+                        score -= self.at(i, j).get_score()
+        return score
     
     # finds if someone is in check
     def in_check(self, color):

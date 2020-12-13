@@ -33,6 +33,8 @@ GREEN = (0, 0, 0)
 chess = Chess(); chess.start()
 player = pygame.transform.scale(pygame.image.load("images/Player.png"),(100,100))
 computer = pygame.transform.scale(pygame.image.load("images/Computer.png"),(100,100))
+wreath = pygame.transform.scale(pygame.image.load("images/wreath.png"),(450,100))
+wreath = pygame.transform.rotate(wreath, 90)
 b = pygame.transform.scale(pygame.image.load("images/blackBishopElf.png"),(100,100))
 p = pygame.transform.scale(pygame.image.load("images/blackPawnElf.png"),(100,100))
 r = pygame.transform.scale(pygame.image.load("images/blackRookSanta.png"),(100,100))
@@ -64,10 +66,12 @@ def create_board():
             pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
     # player's side
     pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
-    pygame.draw.rect(screenPieces, GREEN, [850,50,100,100])
-    pygame.draw.rect(screenPieces, GREEN, [850,650,100,100])
-    screenPieces.blit(player,(850,650))
-    screenPieces.blit(computer,(850,50))
+    pygame.draw.rect(screenPieces, GREEN, [865,50,100,100])
+    pygame.draw.rect(screenPieces, GREEN, [865,650,100,100])
+    screenPieces.blit(player,(865,650))
+    screenPieces.blit(computer,(865,50))
+    screenPieces.blit(wreath,(780,-35))
+    screenPieces.blit(wreath,(780,375))
 
 # updates board after moves
 def update_board():
