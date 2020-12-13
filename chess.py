@@ -1,14 +1,24 @@
 from board import Board
-import copy
+import copy, random
 
 # plays against the human in chess
 class AI:
     INF = 10 ** 3
-    DEPTH = 2 # moves to look ahead into the future
+    DEPTH = 1 # moves to look ahead into the future
     
     # determines the next move of the ai
     def next_move(self, chess):
-        if self.__turns == 
+        print(chess.turns())
+        if chess.turns() == 0:
+            return ((1, 4), (3, 4))
+        elif chess.turns() == 1:
+            return ((0, 1), (2, 2))
+        elif chess.turns() == 3:
+            res = random.uniform(0, 1)
+            if res == 0:
+                return ((0, 6), (2, 5))
+            else:
+                return ((0, 5), (3, 2))
 
         best_score, next = -self.INF, None
         for i in range(chess.dimens()):
@@ -31,7 +41,7 @@ class AI:
     def minimax(self, chess, depth, alpha, beta, maximizing):
         # end condition
         if depth == 0:
-            return -chess.evaluate()
+            return chess.evaluate()
         
         if maximizing: # maximizing player (ai)
             value = -self.INF
@@ -390,3 +400,7 @@ class Chess:
     # returns the turn
     def turn(self):
         return self.__turn
+    
+    # returns the turns
+    def turns(self):
+        return self.__turns
