@@ -75,6 +75,21 @@ class Chess:
         legal_moves = []
         if self.at(pos[0]-2, pos[1]-1).get_color() != color and pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8: # up and left
             legal_moves.append((pos[0]-2, pos[1]-1))
+        if self.at(pos[0]-2, pos[1]+1).get_color() != color and pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]+1 >= 0 and pos[1]+1 < 8: # up and right
+            legal_moves.append((pos[0]-2, pos[1]+1))
+        if self.at(pos[0]+2, pos[1]-1).get_color() != color and pos[0]+2 >= 0 and pos[0]+2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8: # down and left
+            legal_moves.append((pos[0]+2, pos[1]-1))
+        if self.at(pos[0]+2, pos[1]+1).get_color() != color and pos[0]+2 >= 0 and pos[0]+2 < 8 and pos[1]+1 >= 0 and pos[1]+1 < 8: # down and right
+            legal_moves.append((pos[0]+2, pos[1]+1))
+        if self.at(pos[0]-1, pos[1]-2).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < 8 and pos[1]-2 >= 0 and pos[1]-2 < 8: # left and up
+            legal_moves.append((pos[0]-1, pos[1]-2))
+        if self.at(pos[0]+1, pos[1]-2).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < 8 and pos[1]-2 >= 0 and pos[1]-2 < 8: # left and down
+            legal_moves.append((pos[0]+1, pos[1]-2))
+        if self.at(pos[0]-1, pos[1]+2).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < 8 and pos[1]+2 >= 0 and pos[1]+2 < 8: # right and up
+            legal_moves.append((pos[0]-1, pos[1]+2))
+        if self.at(pos[0]+1, pos[1]+2).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < 8 and pos[1]+2 >= 0 and pos[1]+2 < 8: # right and down
+            legal_moves.append((pos[0]+1, pos[1]+2))
+        
         # do rest
         return legal_moves
 
@@ -118,7 +133,11 @@ class Chess:
                     legal_moves.append((pos[0]+i, pos[1]-i))
                 break
         return legal_moves
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 64310d9d1ced17c3229a687fbf6251dcf2c44f2d
     # generates legal moves for a particular queen
     def generate_queen_moves(self, color, pos):
         legal_moves = []
@@ -126,32 +145,32 @@ class Chess:
         for i in range(1, self.__board.DIMENS): # move up
             if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
                 piece = self.at(pos[0]-i, pos[1])
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
                         legal_moves.append((pos[0]-i, pos[1]))
                     break
                 legal_moves.append((pos[0]-i, pos[1]))
         for i in range(1, self.__board.DIMENS): # move down
             if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
                 piece = self.at(pos[0]+i, pos[1])
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
                         legal_moves.append((pos[0]+i, pos[1]))
                     break
                 legal_moves.append((pos[0]+i, pos[1]))
         for i in range(1, self.__board.DIMENS): # move right
             if pos[0]-i >= 0 and pos[0]+i <= self.__board.DIMENS:
                 piece = self.at(pos[0], pos[1]+i)
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
                         legal_moves.append((pos[0], pos[1]+i))
                     break
                 legal_moves.append((pos[0], pos[1]+i))
         for i in range(1, self.__board.DIMENS): # move left
             if pos[0]-i >= 0 and pos[0]+i <= self.__board.DIMENS:
                 piece = self.at(pos[0], pos[1]-i)
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
+                if piece != self.__board.FREE: # not a free space
+                    if color != piece.get_color(): # opponent's piece
                         legal_moves.append((pos[0], pos[1]-i))
                     break
                 legal_moves.append((pos[0], pos[1]-i))
