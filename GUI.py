@@ -18,7 +18,7 @@ WHITE = (242, 242, 242)
 BLACK = (40, 120, 40)
 
 # game attrs
-chess = Chess()
+chess = Chess(); chess.start()
 b = pygame.transform.scale(pygame.image.load("images/blackBishopElf.png"),(100,100))
 p = pygame.transform.scale(pygame.image.load("images/blackPawnElf.png"),(100,100))
 r = pygame.transform.scale(pygame.image.load("images/blackRookSanta.png"),(100,100))
