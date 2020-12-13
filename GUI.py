@@ -9,6 +9,7 @@ pygame.init() # initializes the game
 # Sounds
 mixer.music.load('backgroundChristmas.mp3')
 mixer.music.play(-1)
+mixer.music.set_volume(.1)
 move = pygame.mixer.Sound('move.wav')
 
 # window caption
@@ -88,8 +89,9 @@ while True:
             coordinates_fin = pygame.mouse.get_pos()
             x_fin = coordinates_fin[1] // 100
             y_fin = coordinates_fin[0] // 100
-            chess.move((x_init, y_init), (x_fin, y_fin))
-            pygame.mixer.Sound.play(move)
+            moveTrue = chess.move((x_init, y_init), (x_fin, y_fin))
+            if moveTrue:
+                pygame.mixer.Sound.play(move)
             update_board()
     
         # displays GUI
