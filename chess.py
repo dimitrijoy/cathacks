@@ -73,24 +73,22 @@ class Chess:
     # generates legal moves for a particular knight
     def generate_knight_moves(self, color, pos):
         legal_moves = []
-        if self.at(pos[0]-2, pos[1]-1).get_color() != color and pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8: # up and left
+        if pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8 and (self.at(pos[0]-2, pos[1]-1) == self.__board.FREE or self.at(pos[0]-2, pos[1]-1).get_color() != color): # up and left
             legal_moves.append((pos[0]-2, pos[1]-1))
-        if self.at(pos[0]-2, pos[1]+1).get_color() != color and pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]+1 >= 0 and pos[1]+1 < 8: # up and right
+        if pos[0]-2 >= 0 and pos[0]-2 < 8 and pos[1]+1 >= 0 and pos[1]+1 < 8 and (self.at(pos[0]-2, pos[1]+1) == self.__board.FREE or self.at(pos[0]-2, pos[1]+1).get_color() != color): # up and right
             legal_moves.append((pos[0]-2, pos[1]+1))
-        if self.at(pos[0]+2, pos[1]-1).get_color() != color and pos[0]+2 >= 0 and pos[0]+2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8: # down and left
+        if pos[0]+2 >= 0 and pos[0]+2 < 8 and pos[1]-1 >= 0 and pos[1]-1 < 8 and (self.at(pos[0]+2, pos[1]-1) == self.__board.FREE or self.at(pos[0]+2, pos[1]-1).get_color() != color): # down and left
             legal_moves.append((pos[0]+2, pos[1]-1))
-        if self.at(pos[0]+2, pos[1]+1).get_color() != color and pos[0]+2 >= 0 and pos[0]+2 < 8 and pos[1]+1 >= 0 and pos[1]+1 < 8: # down and right
+        if pos[0]+2 >= 0 and pos[0]+2 < 8 and pos[1]+1 >= 0 and pos[1]+1 < 8 and (self.at(pos[0]+2, pos[1]+1) == self.__board.FREE or self.at(pos[0]+2, pos[1]+1).get_color() != color): # down and right
             legal_moves.append((pos[0]+2, pos[1]+1))
-        if self.at(pos[0]-1, pos[1]-2).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < 8 and pos[1]-2 >= 0 and pos[1]-2 < 8: # left and up
+        if pos[0]-1 >= 0 and pos[0]-1 < 8 and pos[1]-2 >= 0 and pos[1]-2 < 8 and (self.at(pos[0]-1, pos[1]-2) == self.__board.FREE or self.at(pos[0]-1, pos[1]-2).get_color() != color): # left and up
             legal_moves.append((pos[0]-1, pos[1]-2))
-        if self.at(pos[0]+1, pos[1]-2).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < 8 and pos[1]-2 >= 0 and pos[1]-2 < 8: # left and down
+        if pos[0]+1 >= 0 and pos[0]+1 < 8 and pos[1]-2 >= 0 and pos[1]-2 < 8 and (self.at(pos[0]+1, pos[1]-2) == self.__board.FREE or self.at(pos[0]+1, pos[1]-2).get_color() != color): # left and down
             legal_moves.append((pos[0]+1, pos[1]-2))
-        if self.at(pos[0]-1, pos[1]+2).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < 8 and pos[1]+2 >= 0 and pos[1]+2 < 8: # right and up
+        if pos[0]-1 >= 0 and pos[0]-1 < 8 and pos[1]+2 >= 0 and pos[1]+2 < 8 and (self.at(pos[0]-1, pos[1]+2) == self.__board.FREE or self.at(pos[0]-1, pos[1]+2).get_color() != color): # right and up
             legal_moves.append((pos[0]-1, pos[1]+2))
-        if self.at(pos[0]+1, pos[1]+2).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < 8 and pos[1]+2 >= 0 and pos[1]+2 < 8: # right and down
+        if pos[0]+1 >= 0 and pos[0]+1 < 8 and pos[1]+2 >= 0 and pos[1]+2 < 8 and (self.at(pos[0]+1, pos[1]+2) == self.__board.FREE or self.at(pos[0]+1, pos[1]+2).get_color() != color): # right and down
             legal_moves.append((pos[0]+1, pos[1]+2))
-        
-        # do rest
         return legal_moves
 
     # generates legal moves for a particular bishop
@@ -211,21 +209,21 @@ class Chess:
 
         def generate_king_moves(self, color, pos):
             legal_moves = []
-            if  pos[0]-1 >= 0 and self.at(pos[0]-1, pos[1]).get_color() != color or self.at(pos[0]-1, pos[1]).__board.FREE: # move one place forward
+            if  pos[0]-1 >= 0 and (self.at(pos[0]-1, pos[1]) == self.__board.FREE or self.at(pos[0]-1, pos[1]).get_color() != color): # move one place forward
                 legal_moves.append((pos[0]-2, pos[1]-1))
-            if  pos[0]-1 <= 8 and self.at(pos[0]+1, pos[1]).get_color() != color or self.at(pos[0]+1, pos[1]).__board.FREE: # move one place backward
+            if  pos[0]-1 <= 8 and (self.at(pos[0]+1, pos[1]) == self.__board.FREE or self.at(pos[0]+1, pos[1]).get_color() != color): # move one place backward
                 legal_moves.append((pos[0]+1, pos[1]))
-            if  pos[1]-1 >= 0 and self.at(pos[0], pos[1]-1).get_color() != color or self.at(pos[0], pos[1]-1).__board.FREE: # move one place left
+            if  pos[1]-1 >= 0 and (self.at(pos[0], pos[1]-1) == self.__board.FREE or self.at(pos[0], pos[1]-1).get_color() != color): # move one place left
                 legal_moves.append((pos[0], pos[1]-1))
-            if  pos[0]-1 >= 0 and self.at(pos[0], pos[1]+1).get_color() != color: # move one place right
+            if  pos[0]-1 >= 0 and (self.at(pos[0], pos[1]+1) == self.__board.FREE or self.at(pos[0], pos[1]+1).get_color() != color): # move one place right
                 legal_moves.append((pos[0], pos[1]+1))
-            if  pos[0]-1 >= 0 and pos[1] <= 8 and self.at(pos[0]-1, pos[1]+1).get_color() != color: # move one place up and right
+            if  pos[0]-1 >= 0 and pos[1] <= 8 and (self.at(pos[0]-1, pos[1]+1) == self.__board.FREE or self.at(pos[0]-1, pos[1]+1).get_color() != color): # move one place up and right
                 legal_moves.append((pos[0]-1, pos[1]+1))
-            if  pos[0]-1 >= 0 and pos[1] >= 0 and self.at(pos[0]-1, pos[1]-1).get_color() != color: # move one place up and left
+            if  pos[0]-1 >= 0 and pos[1] >= 0 and (self.at(pos[0]-1, pos[1]-1) == self.__board.FREE or self.at(pos[0]-1, pos[1]-1).get_color() != color): # move one place up and left
                 legal_moves.append((pos[0]-1, pos[1]-1))
-            if  pos[0]+1 <= 8 and pos[1] <= 8 and self.at(pos[0]+1, pos[1]+1).get_color() != color: # move one place down and right
+            if  pos[0]+1 <= 8 and pos[1] <= 8 and (self.at(pos[0]+1, pos[1]+1) == self.__board.FREE or self.at(pos[0]+1, pos[1]+1).get_color() != color): # move one place down and right
                 legal_moves.append((pos[0]+1, pos[1]+1))
-            if  pos[0]+1 <= 8 and pos[1] >= 0 and self.at(pos[0]+1, pos[1]-1).get_color() != color: # move one place down and left
+            if  pos[0]+1 <= 8 and pos[1] >= 0 and (self.at(pos[0]+1, pos[1]-1) == self.__board.FREE or self.at(pos[0]+1, pos[1]-1).get_color() != color): # move one place down and left
                 legal_moves.append((pos[0]+1, pos[1]-1))
             return legal_moves
             
@@ -236,6 +234,7 @@ class Chess:
         # determines if src/dest is free or occupied by black/white
         src_color, dest_color = self.__board.FREE, self.__board.FREE
         if src != self.__board.FREE: # not a free space
+            print(src)
             src_color, dest_color = src.get_color(), self.__board.FREE if dest == self.__board.FREE else dest.get_color()
             if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
                 self.__board.move(old, new)
@@ -244,3 +243,7 @@ class Chess:
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
+    
+    # starts the game
+    def start(self):
+        self.generate_legal_moves()
