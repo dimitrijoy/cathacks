@@ -37,7 +37,6 @@ class AI:
                         if score > best_score:
                             best_score = score
                             next = ((i,j), k)
-        print(best_score)
         return next
     
     # evaluates the score of a particular move
@@ -58,7 +57,7 @@ class AI:
                             value = max(value, self.minimax(dup, depth - 1, alpha, beta, False))
                             del dup
                             alpha = max(alpha, value)
-                            if alpha <= beta:
+                            if alpha >= beta:
                                 break # stop searching
             return value
         else: # minimizing player (human)
@@ -72,7 +71,7 @@ class AI:
                             value = min(value, self.minimax(dup, depth - 1, alpha, beta, True))
                             del dup
                             beta = min(beta, value)
-                            if beta >= alpha:
+                            if beta <= alpha:
                                 break # stop searching
             return value
 
@@ -371,10 +370,11 @@ class Chess:
                         return False # does not stop check
                     
                     # updates the game evaluation
+                    mid_bonus = 20 if new[0] >= 2 and new[0] <= 5 and new[1] >= 2 and new[1] <= 5 else 0
                     if dest_color == self.WHITE:
-                        self.__evaluation -= dest.get_score()
+                        self.__evaluation -= dest.get_score() + mid_bonus
                     elif dest_color == self.BLACK:
-                        self.__evaluation += dest.get_score()
+                        self.__evaluation += dest.get_score() + mid_bonus
                     
                     return True # success!
                 else: # need to account for pawn's first move
