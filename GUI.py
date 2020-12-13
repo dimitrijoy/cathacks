@@ -4,12 +4,13 @@ from pygame import mixer
 import pygame, time, threading
 
 pygame.init() # initializes the game
-
+'''
 # sounds
 # bg music
 mixer.music.load('Sound/backgroundChristmas.mp3')
 mixer.music.play(-1)
 mixer.music.set_volume(.1)
+'''
 # chess piece moving
 move = pygame.mixer.Sound('Sound/move.wav')
 pygame.mixer.Sound.set_volume(move, .1)
@@ -121,7 +122,8 @@ while True:
                 tempCoordinates = pygame.mouse.get_pos()
                 x_temp = tempCoordinates[1]
                 y_temp = tempCoordinates[0]
-                screenPieces.blit(pieces[chess.at(x_init,y_init).get_type()], (y_temp-50,x_temp-50))
+                if chess.at(x_init, y_init) != ' ':
+                    screenPieces.blit(pieces[chess.at(x_init,y_init-8).get_type()], (y_temp-50,x_temp-50))
                 #update_board()
 
             if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
