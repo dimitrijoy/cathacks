@@ -117,6 +117,7 @@ while True:
                     x_init = coordinates_init[1] // 100
                     y_init = coordinates_init[0] // 100
             
+            '''
             elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
                 screenPieces.blit(FREE, (x_init,y_init))
                 tempCoordinates = pygame.mouse.get_pos()
@@ -125,6 +126,7 @@ while True:
                 if chess.at(x_init, y_init) != ' ':
                     screenPieces.blit(pieces[chess.at(x_init,y_init-8).get_type().upper()], (y_temp-50,x_temp-50))
                 #update_board()
+            '''
 
             if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
                 coordinates_fin = pygame.mouse.get_pos()
@@ -137,7 +139,10 @@ while True:
                     update_board()
         else:
             next = ai.next_move(chess)
-            chess.move(next[0], next[1])
+            if next == None: # checkmate
+                print("Checkmate!")
+            else:
+                chess.move(next[0], next[1])
 
         # displays GUI
         pygame.display.flip()

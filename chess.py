@@ -5,16 +5,19 @@ import copy, random
 class AI:
     INF = 10 ** 3
     DEPTH = 1 # moves to look ahead into the future
+
+    def __init__(self):
+        self.__turns = 0
     
     # determines the next move of the ai
     def next_move(self, chess):
-        print(chess.turns())
-        if chess.turns() == 0:
+        self.__turns += 1
+        if self.__turns == 1: # generic opener
             return ((1, 4), (3, 4))
-        elif chess.turns() == 1:
+        elif self.__turns == 2:
             return ((0, 1), (2, 2))
-        elif chess.turns() == 3:
-            res = random.uniform(0, 1)
+        elif self.__turns == 3:
+            res = random.randrange(0, 2)
             if res == 0:
                 return ((0, 6), (2, 5))
             else:
@@ -34,6 +37,7 @@ class AI:
                         if score > best_score:
                             best_score = score
                             next = ((i,j), k)
+        print(best_score)
         return next
     
     # evaluates the score of a particular move
@@ -41,7 +45,7 @@ class AI:
     def minimax(self, chess, depth, alpha, beta, maximizing):
         # end condition
         if depth == 0:
-            return chess.evaluate()
+            return -chess.evaluate()
         
         if maximizing: # maximizing player (ai)
             value = -self.INF
@@ -76,7 +80,7 @@ class AI:
 # computes legality of moves
 class Chess:
     BLACK, WHITE = -1, 1 # for managing turns
-    ONGOING, STALEMATE, VICTORY = 0, 1, 2
+    ONGOING, FINISHED = 0, 1
 
     def __init__(self):
         self.__board = Board()
@@ -84,7 +88,6 @@ class Chess:
         self.__evaluation = 0
         self.__state = self.ONGOING
         self.__turn = self.WHITE # white always goes first
-        self.__turns = 0
         self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
                                 (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)] 
     
@@ -348,43 +351,43 @@ class Chess:
     # moves a specified piece
     # returns True on success and False otherwise for the caller to handle
     def move(self, old, new):
-        src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
-        if src != self.__board.FREE: # not a free space
-            src_color, dest_color = src.get_color(), self.__board.FREE if dest == self.__board.FREE else dest.get_color()
-            if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
-                # assume the move is legal until check
-                self.__board.move(old, new)
-                self.next()
-                self.generate_legal_moves()
-
-                # fails in check
-                if self.in_check(src_color):
-                    # reverts the move
-                    self.__board.move(new, old)
-                    self.__board.place(dest, new[0], new[1])
+        if self.__state == self.ONGOING:
+            src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
+            if src != self.__board.FREE: # not a free space
+                src_color, dest_color = src.get_color(), self.__board.FREE if dest == self.__board.FREE else dest.get_color()
+                if src_color == self.__turn and src_color != dest_color and new in src.get_legal_moves(): # player is moving their own piece to a valid space
+                    # assume the move is legal until check
+                    self.__board.move(old, new)
                     self.next()
                     self.generate_legal_moves()
-                    return False # does not stop check
-                
-                # updates the game evaluation
-                if dest_color == self.WHITE:
-                    self.__evaluation -= dest.get_score()
-                elif dest_color == self.BLACK:
-                    self.__evaluation += dest.get_score()
-                
-                self.__turns += 1
-                return True # success!
-            else: # need to account for pawn's first move
-                if src.get_type() == 'p' and old in self.__unmoved_pawns:
-                    if new[0] == old[0]-2*self.__turn and new[1] == old[1] and dest == self.__board.FREE:
-                        self.__board.move(old, new)
+
+                    # fails in check
+                    if self.in_check(src_color):
+                        # reverts the move
+                        self.__board.move(new, old)
+                        self.__board.place(dest, new[0], new[1])
                         self.next()
                         self.generate_legal_moves()
-                        return True # success!
-                return False # not a pawn's first move
-        else:
-            return False # invalid
-        
+                        return False # does not stop check
+                    
+                    # updates the game evaluation
+                    if dest_color == self.WHITE:
+                        self.__evaluation -= dest.get_score()
+                    elif dest_color == self.BLACK:
+                        self.__evaluation += dest.get_score()
+                    
+                    return True # success!
+                else: # need to account for pawn's first move
+                    if src.get_type() == 'p' and old in self.__unmoved_pawns:
+                        if new[0] == old[0]-2*self.__turn and new[1] == old[1] and dest == self.__board.FREE:
+                            self.__board.move(old, new)
+                            self.next()
+                            self.generate_legal_moves()
+                            return True # success!
+                    return False # not a pawn's first move
+            else:
+                return False # invalid 
+        return False
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
@@ -397,10 +400,10 @@ class Chess:
     def start(self):
         self.generate_legal_moves() # initial legal moves
     
+    # stops the game
+    def stop(self):
+        self.__state = self.FINISHED
+    
     # returns the turn
     def turn(self):
         return self.__turn
-    
-    # returns the turns
-    def turns(self):
-        return self.__turns
