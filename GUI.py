@@ -7,10 +7,13 @@ from pygame import mixer
 pygame.init() # initializes the game
 
 # Sounds
+# Background Music
 mixer.music.load('backgroundChristmas.mp3')
 mixer.music.play(-1)
 mixer.music.set_volume(.1)
+# Chess piece moving
 move = pygame.mixer.Sound('move.wav')
+pygame.mixer.Sound.set_volume(move, .1)
 
 # window caption
 CAPTION = "Chess"
