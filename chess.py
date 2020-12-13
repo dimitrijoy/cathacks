@@ -8,6 +8,8 @@ class Chess:
     def __init__(self):
         self.__board = Board()
         self.__turn = self.WHITE # white always goes first
+        self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
+                                (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)] 
     
     # returns piece at [row][col]
     def at(self, row, col):
@@ -23,7 +25,9 @@ class Chess:
             for j in range(self.__board.DIMENS):
                 if self.at(i, j) != self.__board.FREE:
                     piece, legal_moves = self.at(i, j), []
-                    if piece.get_type() == 'k':
+                    if piece.get_type() == 'p':
+                        legal_moves = self.generate_pawn_moves(piece.get_color(), (i, j))
+                    elif piece.get_type() == 'k':
                         legal_moves = self.generate_knight_moves(piece.get_color(), (i, j))
                     elif piece.get_type() == 'b':
                         legal_moves = self.generate_bishop_moves(piece.get_color(), (i, j))
@@ -31,43 +35,19 @@ class Chess:
                         legal_moves = self.generate_rook_moves(piece.get_color(), (i, j))
                     elif piece.get_type() == 'q':
                         legal_moves = self.generate_queen_moves(piece.get_color(), (i, j))
+                    else:
+                        legal_moves = self.generate_king_moves(piece.get_color(), (i, j))
                     piece.update_legal_moves(legal_moves)
     
-    # generates legal moves for a particular knight
-    def generate_rook_moves(self, color, pos):
-        legal_moves= []
-        for i in range(1, self.__board.DIMENS): # move up
-            if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
-                piece = self.at(pos[0]-i, pos[1])
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
-                        legal_moves.append((pos[0]-i, pos[1]))
-                    break
-                legal_moves.append((pos[0]-i, pos[1]))
-        for i in range(1, self.__board.DIMENS): # move down
-            if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
-                piece = self.at(pos[0]+i, pos[1])
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
-                        legal_moves.append((pos[0]+i, pos[1]))
-                    break
-                legal_moves.append((pos[0]+i, pos[1]))
-        for i in range(1, self.__board.DIMENS): # move right
-            if pos[0]-i >= 0 and pos[0]+i <= self.__board.DIMENS:
-                piece = self.at(pos[0], pos[1]+i)
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
-                        legal_moves.append((pos[0], pos[1]+i))
-                    break
-                legal_moves.append((pos[0], pos[1]+i))
-        for i in range(1, self.__board.DIMENS): # move left
-            if pos[0]-i >= 0 and pos[0]+i <= self.__board.DIMENS:
-                piece = self.at(pos[0], pos[1]-i)
-                if piece != self.__board.FREE:
-                    if color != piece.get_color():
-                        legal_moves.append((pos[0], pos[1]-i))
-                    break
-                legal_moves.append((pos[0], pos[1]-i))
+    # generates legal moves for a particular pawn
+    def generate_pawn_moves(self, color, pos):
+        legal_moves = []
+        if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1] and self.at(pos[0]-self.__turn, pos[1]) == self.__board.FREE: # move one place forward into a free space
+            legal_moves.append((pos[0]-self.__turn, pos[1]))
+        if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS and self.at(pos[0]-self.__turn, pos[1]-1) != self.__board.FREE and self.at(pos[0]-self.__turn, pos[1]-1).get_color() != color: # diagonal left offensive move
+            legal_moves.append(pos[0]-self.__turn, pos[1]-1)
+        if pos[0]-self.__turn >= 0 and pos[0]-self.__turn < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS and self.at(pos[0]-self.__turn, pos[1]+1) != self.__board.FREE and self.at(pos[0]-self.__turn, pos[1]+1).get_color() != color: # diagonal right offensive move
+            legal_moves.append(pos[0]-self.__turn, pos[1]+1)
         return legal_moves
 
     # generates legal moves for a particular knight
@@ -131,6 +111,43 @@ class Chess:
                     legal_moves.append((pos[0]+i, pos[1]-i))
                 break
         return legal_moves
+    
+    # generates legal moves for a particular knight
+    def generate_rook_moves(self, color, pos):
+        legal_moves= []
+        for i in range(1, self.__board.DIMENS): # move up
+            if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
+                piece = self.at(pos[0]-i, pos[1])
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
+                        legal_moves.append((pos[0]-i, pos[1]))
+                    break
+                legal_moves.append((pos[0]-i, pos[1]))
+        for i in range(1, self.__board.DIMENS): # move down
+            if pos[0]+i >= 0 and pos[0]+i < self.__board.DIMENS:
+                piece = self.at(pos[0]+i, pos[1])
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
+                        legal_moves.append((pos[0]+i, pos[1]))
+                    break
+                legal_moves.append((pos[0]+i, pos[1]))
+        for i in range(1, self.__board.DIMENS): # move right
+            if pos[1]+i >= 0 and pos[1]+i < self.__board.DIMENS:
+                piece = self.at(pos[0], pos[1]+i)
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
+                        legal_moves.append((pos[0], pos[1]+i))
+                    break
+                legal_moves.append((pos[0], pos[1]+i))
+        for i in range(1, self.__board.DIMENS): # move left
+            if pos[1]-i >= 0 and pos[1]-i < self.__board.DIMENS:
+                piece = self.at(pos[0], pos[1]-i)
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
+                        legal_moves.append((pos[0], pos[1]-i))
+                    break
+                legal_moves.append((pos[0], pos[1]-i))
+        return legal_moves
   
     # generates legal moves for a particular queen
     def generate_queen_moves(self, color, pos):
@@ -139,32 +156,32 @@ class Chess:
         for i in range(1, self.__board.DIMENS): # move up
             if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
                 piece = self.at(pos[0]-i, pos[1])
-                if piece != self.__board.FREE: # not a free space
-                    if color != piece.get_color(): # opponent's piece
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
                         legal_moves.append((pos[0]-i, pos[1]))
                     break
                 legal_moves.append((pos[0]-i, pos[1]))
         for i in range(1, self.__board.DIMENS): # move down
-            if pos[0]-i >= 0 and pos[0]-i <= self.__board.DIMENS:
+            if pos[0]+i >= 0 and pos[0]+i < self.__board.DIMENS:
                 piece = self.at(pos[0]+i, pos[1])
-                if piece != self.__board.FREE: # not a free space
-                    if color != piece.get_color(): # opponent's piece
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
                         legal_moves.append((pos[0]+i, pos[1]))
                     break
                 legal_moves.append((pos[0]+i, pos[1]))
         for i in range(1, self.__board.DIMENS): # move right
-            if pos[0]-i >= 0 and pos[0]+i <= self.__board.DIMENS:
+            if pos[1]+i >= 0 and pos[1]+i < self.__board.DIMENS:
                 piece = self.at(pos[0], pos[1]+i)
-                if piece != self.__board.FREE: # not a free space
-                    if color != piece.get_color(): # opponent's piece
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
                         legal_moves.append((pos[0], pos[1]+i))
                     break
                 legal_moves.append((pos[0], pos[1]+i))
         for i in range(1, self.__board.DIMENS): # move left
-            if pos[0]-i >= 0 and pos[0]+i <= self.__board.DIMENS:
+            if pos[1]-i >= 0 and pos[1]-i < self.__board.DIMENS:
                 piece = self.at(pos[0], pos[1]-i)
-                if piece != self.__board.FREE: # not a free space
-                    if color != piece.get_color(): # opponent's piece
+                if piece != self.__board.FREE:
+                    if color != piece.get_color():
                         legal_moves.append((pos[0], pos[1]-i))
                     break
                 legal_moves.append((pos[0], pos[1]-i))
@@ -207,27 +224,26 @@ class Chess:
                 break
         return legal_moves
 
-        def generate_king_moves(self, color, pos):
-            legal_moves = []
-            if self.at(pos[0]-1, pos[1]).get_color() != color and pos[0]-1 >= 0: # move one place forward
-                legal_moves.append((pos[0]-2, pos[1]-1))
-            if self.at(pos[0]+1, pos[1]).get_color() != color and pos[0]-1 <= 8: # move one place backward
-                legal_moves.append((pos[0]+1, pos[1]))
-            if self.at(pos[0], pos[1]-1).get_color() != color and pos[1]-1 >= 0: # move one place left
-                legal_moves.append((pos[0], pos[1]-1))
-            if self.at(pos[0], pos[1]+1).get_color() != color and pos[0]-1 >= 0: # move one place right
-                legal_moves.append((pos[0], pos[1]+1))
-            if self.at(pos[0]-1, pos[1]+1).get_color() != color and pos[0]-1 >= 0 and pos[1] <= 8: # move one place up and right
-                legal_moves.append((pos[0]-1, pos[1]+1))
-            if self.at(pos[0]-1, pos[1]-1).get_color() != color and pos[0]-1 >= 0 and pos[1] >= 0: # move one place up and left
-                legal_moves.append((pos[0]-1, pos[1]-1))
-            if self.at(pos[0]+1, pos[1]+1).get_color() != color and pos[0]+1 <= 8 and pos[1] <= 8: # move one place down and right
-                legal_moves.append((pos[0]+1, pos[1]+1))
-            if self.at(pos[0]+1, pos[1]-1).get_color() != color and pos[0]+1 <= 8 and pos[1] >= 0: # move one place down and left
-                legal_moves.append((pos[0]+1, pos[1]-1))
-            return legal_moves
-            
-            
+    # generates legal moves for a particular king
+    def generate_king_moves(self, color, pos):
+        legal_moves = []
+        if self.at(pos[0]-1, pos[1]).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS: # move one place forward
+            legal_moves.append((pos[0]-2, pos[1]-1))
+        if pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and self.at(pos[0]+1, pos[1]).get_color() != color: # move one place backward
+            legal_moves.append((pos[0]+1, pos[1]))
+        if self.at(pos[0], pos[1]-1).get_color() != color and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place left
+            legal_moves.append((pos[0], pos[1]-1))
+        if self.at(pos[0], pos[1]+1).get_color() != color and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place right
+            legal_moves.append((pos[0], pos[1]+1))
+        if self.at(pos[0]-1, pos[1]+1).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place up and right
+            legal_moves.append((pos[0]-1, pos[1]+1))
+        if self.at(pos[0]-1, pos[1]-1).get_color() != color and pos[0]-1 >= 0 and pos[0]-1 < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place up and left
+            legal_moves.append((pos[0]-1, pos[1]-1))
+        if self.at(pos[0]+1, pos[1]+1).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and pos[1]+1 >= 0 and pos[1]+1 < self.__board.DIMENS: # move one place down and right
+            legal_moves.append((pos[0]+1, pos[1]+1))
+        if self.at(pos[0]+1, pos[1]-1).get_color() != color and pos[0]+1 >= 0 and pos[0]+1 < self.__board.DIMENS and pos[1]-1 >= 0 and pos[1]-1 < self.__board.DIMENS: # move one place down and left
+            legal_moves.append((pos[0]+1, pos[1]-1))
+        return legal_moves
 
     def move(self, old, new):
         src, dest = self.__board.at(old[0], old[1]), self.__board.at(new[0], new[1])
@@ -243,6 +259,7 @@ class Chess:
     # next turn
     def next(self):
         self.__turn *= -1 # changes turns
+        self.generate_legal_moves()
     
     # starts the game
     def start(self):

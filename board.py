@@ -18,8 +18,6 @@ class Board:
                         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
                         [Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE), Pawn(chess.Chess.WHITE)],
                         [Rook(chess.Chess.WHITE), Knight(chess.Chess.WHITE), Bishop(chess.Chess.WHITE), Queen(chess.Chess.WHITE), King(chess.Chess.WHITE), Bishop(chess.Chess.WHITE), Knight(chess.Chess.WHITE), Rook(chess.Chess.WHITE)]]
-        self.__unmoved_pawns = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
-                                (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7)] 
     
     # returns piece at [row][col]
     def at(self, row, col):
