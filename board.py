@@ -90,4 +90,4 @@ class Queen(Piece):
 # inherits properties of Piece
 class King(Piece):
     def __init__(self, color):
-        super().__init__(color, 90, 'a')
+        super().__init__(color, 60, 'a')
