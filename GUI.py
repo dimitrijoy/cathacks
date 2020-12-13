@@ -24,9 +24,9 @@ screenPieces = screen = pygame.display.set_mode(DIMENS)
 
 # colors
 WHITE = (242, 242, 242)
-BLACK = (40, 120, 40)
+GREEN = (40, 120, 40)
 SILVER = (200,200,200)
-GREEN = (0, 0, 0)
+BLACK = (0, 0, 0)
 
 # game attrs
 ai = AI()
@@ -60,15 +60,15 @@ def create_board():
         for j in range(chess.dimens()):
             # white then black
             pygame.draw.rect(screenPieces, WHITE, [(i*2)*100, (2*j)*100, 100, 100])
-            pygame.draw.rect(screenPieces, BLACK, [(2*i-1)*100, (2*j)*100, 100, 100])
+            pygame.draw.rect(screenPieces, GREEN, [(2*i-1)*100, (2*j)*100, 100, 100])
             # black then white
             pygame.draw.rect(screenPieces, WHITE, [(2*i-1)*100, (2*j-1)*100, 100, 100])
-            pygame.draw.rect(screenPieces, BLACK, [(2*i)*100, (2*j-1)*100, 100, 100])
+            pygame.draw.rect(screenPieces, GREEN, [(2*i)*100, (2*j-1)*100, 100, 100])
     # player's side
     pygame.draw.rect(screenPieces, SILVER, [800,0,200,1000])
-    pygame.draw.rect(screenPieces, GREEN, [845, 375, 150, 50])
-    pygame.draw.rect(screenPieces, GREEN, [865,50,100,100])
-    pygame.draw.rect(screenPieces, GREEN, [865,650,100,100])
+    pygame.draw.rect(screenPieces, BLACK, [845, 375, 150, 50])
+    pygame.draw.rect(screenPieces, BLACK, [865,50,100,100])
+    pygame.draw.rect(screenPieces, BLACK, [865,650,100,100])
     screenPieces.blit(player,(865,650))
     screenPieces.blit(computer,(865,50))
     screenPieces.blit(wreath,(780,-35))
@@ -107,10 +107,12 @@ while True:
         clock.tick(60)   
 
         if chess.turn() == chess.WHITE:
+            
             if event.type == pygame.MOUSEBUTTONDOWN: # gets cursor coordinates on mouse button down to select piece
                 coordinates_init = pygame.mouse.get_pos()
-                x_init = coordinates_init[1] // 100
-                y_init = coordinates_init[0] // 100
+                if coordinates_init <= (800,800):
+                    x_init = coordinates_init[1] // 100
+                    y_init = coordinates_init[0] // 100
             '''
             elif event.type == pygame.MOUSEMOTION and pygame.mouse.get_pressed()[0]:
                 tempCoordinates = pygame.mouse.get_pos()
@@ -120,12 +122,13 @@ while True:
             '''
             if event.type == pygame.MOUSEBUTTONUP: # gets cursor coordinates on mouse button up to drop [move] piece
                 coordinates_fin = pygame.mouse.get_pos()
-                x_fin = coordinates_fin[1] // 100
-                y_fin = coordinates_fin[0] // 100
-                moveTrue = chess.move((x_init, y_init), (x_fin, y_fin))
-                if moveTrue:
-                    pygame.mixer.Sound.play(move)
-                update_board()
+                if coordinates_fin <= (800,800):
+                    x_fin = coordinates_fin[1] // 100
+                    y_fin = coordinates_fin[0] // 100
+                    moveTrue = chess.move((x_init, y_init), (x_fin, y_fin))
+                    if moveTrue:
+                        pygame.mixer.Sound.play(move)
+                    update_board()
         else:
             next = ai.next_move(chess)
             chess.move(next[0], next[1])
