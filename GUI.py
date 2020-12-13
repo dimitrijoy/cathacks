@@ -8,7 +8,12 @@ pygame.init() # initializes the game
 # bg music
 mixer.music.load('Sound/backgroundChristmas.mp3')
 mixer.music.play(-1)
+<<<<<<< HEAD
 mixer.music.set_volume(.02)
+=======
+mixer.music.set_volume(.1)
+
+>>>>>>> 25c84607ea7c75d0e62f46b0e01c3785769d99c3
 # chess piece moving
 move = pygame.mixer.Sound('Sound/move.wav')
 pygame.mixer.Sound.set_volume(move, .1)
