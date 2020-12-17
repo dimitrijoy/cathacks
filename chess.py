@@ -1,3 +1,4 @@
+# dependencies
 from board import Board
 import copy, random
 

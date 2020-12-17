@@ -1,3 +1,4 @@
+# dependencies
 import chess
 
 # maintains the position of the pieces on the board
@@ -6,7 +7,6 @@ class Board:
     DIMENS = 8 # board dimensM
     FREE = " " # free space
     INVALID, VALID = False, True # regarding moves
-    SCORES = {'p': 10, 'k': 30, 'b': 30, 'r': 50, 'q': 90, 'a': 900}
 
     def __init__(self):
         # lowercase corresponds to black and uppercase to white

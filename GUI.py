@@ -4,13 +4,12 @@ from pygame import mixer
 import pygame, time, threading
 
 pygame.init() # initializes the game
+
 # sounds
-# bg music
-mixer.music.load('Sound/backgroundChristmas.mp3')
+mixer.music.load("res/raw/bg.mp3") # bg music
 mixer.music.play(-1)
 mixer.music.set_volume(.02)
-# chess piece moving
-move = pygame.mixer.Sound('Sound/move.wav')
+move = pygame.mixer.Sound("res/raw/move.wav") # chess piece moving
 pygame.mixer.Sound.set_volume(move, .1)
 
 # window caption
@@ -18,7 +17,7 @@ CAPTION = "Chessmas"
 pygame.display.set_caption(CAPTION)
 
 # window dimens
-DIMENS = WIDTH, HEIGHT = ((1000,800))
+DIMENS = WIDTH, HEIGHT = ((1000, 800))
 screenPieces = screen = pygame.display.set_mode(DIMENS)
 
 # colors
@@ -30,23 +29,24 @@ BLACK = (0, 0, 0)
 # game attrs
 ai = AI()
 chess = Chess(); chess.start()
-player = pygame.transform.scale(pygame.image.load("images/Player.png"),(100,100))
-computer = pygame.transform.scale(pygame.image.load("images/Computer.png"),(100,100))
-wreath = pygame.transform.scale(pygame.image.load("images/wreath.png"),(450,100))
-wreath = pygame.transform.rotate(wreath, 90)
-b = pygame.transform.scale(pygame.image.load("images/blackBishopElf.png"),(100,100))
-p = pygame.transform.scale(pygame.image.load("images/blackPawnElf.png"),(100,100))
-r = pygame.transform.scale(pygame.image.load("images/blackRookSanta.png"),(100,100))
-k = pygame.transform.scale(pygame.image.load("images/blackKnightReindeer.png"),(100,100))
-q = pygame.transform.scale(pygame.image.load("images/blackQueenSanta.png"),(100,100))
-a = pygame.transform.scale(pygame.image.load("images/blackKingSanta.png"),(100,100))
-B = pygame.transform.scale(pygame.image.load("images/whiteBishopElf.png"),(100,100))
-P = pygame.transform.scale(pygame.image.load("images/whitePawnElf.png"),(100,100))
-R = pygame.transform.scale(pygame.image.load("images/whiteRookSanta.png"),(100,100))
-K = pygame.transform.scale(pygame.image.load("images/whiteKnightReindeer.png"),(100,100))
-Q = pygame.transform.scale(pygame.image.load("images/whiteQueenSanta.png"),(100,100))
-A = pygame.transform.scale(pygame.image.load("images/whiteKingSanta.png"),(100,100))
-FREE = pygame.transform.scale(pygame.image.load("images/blank.png"),(100,100))
+
+# images
+computer = pygame.transform.scale(pygame.image.load("res/drawable/computer.png"), (100,100))
+player = pygame.transform.scale(pygame.image.load("res/drawable/player.png"), (100,100))
+wreath = pygame.transform.scale(pygame.image.load("res/drawable/wreath.png"), (450,100)); wreath = pygame.transform.rotate(wreath, 90)
+p = pygame.transform.scale(pygame.image.load("res/drawable/black_pawn.png"), (100,100))
+b = pygame.transform.scale(pygame.image.load("res/drawable/black_bishop.png"), (100,100))
+k = pygame.transform.scale(pygame.image.load("res/drawable/black_knight.png"), (100,100))
+r = pygame.transform.scale(pygame.image.load("res/drawable/black_rook.png"), (100,100))
+q = pygame.transform.scale(pygame.image.load("res/drawable/black_queen.png"), (100,100))
+a = pygame.transform.scale(pygame.image.load("res/drawable/black_king.png"), (100,100))
+P = pygame.transform.scale(pygame.image.load("res/drawable/white_pawn.png"), (100,100))
+B = pygame.transform.scale(pygame.image.load("res/drawable/white_bishop.png"), (100,100))
+K = pygame.transform.scale(pygame.image.load("res/drawable/white_knight.png"), (100,100))
+R = pygame.transform.scale(pygame.image.load("res/drawable/white_rook.png"), (100,100))
+Q = pygame.transform.scale(pygame.image.load("res/drawable/white_queen.png"), (100,100))
+A = pygame.transform.scale(pygame.image.load("res/drawable/white_king.png"), (100,100))
+FREE = pygame.transform.scale(pygame.image.load("res/drawable/free.png"), (100,100))
 
 # pieces to corresponding images
 pieces = {'p': p, 'P': P, 'r': r, 'R': R, 'k': k, 'K': K,
@@ -73,7 +73,6 @@ def create_board():
     screenPieces.blit(wreath,(780,-35))
     screenPieces.blit(wreath,(780,375))
     
-
 # updates board after moves
 def update_board():
     create_board()
@@ -88,8 +87,8 @@ def update_board():
                     screenPieces.blit(pieces[type], ((j*100), (i*100)))
     screen.blit(font.render(text, True, (255, 255, 255)), (876, 385))
 
+# timer
 clock = pygame.time.Clock()
-
 counter, text = 0, '0'.rjust(3)
 pygame.time.set_timer(pygame.USEREVENT, 1000)
 font = pygame.font.SysFont('Consolas', 30)
@@ -107,8 +106,7 @@ while True:
             y_temp = 3
         clock.tick(60)   
 
-        if chess.turn() == chess.WHITE:
-            
+        if chess.turn() == chess.WHITE: # human's turn
             if event.type == pygame.MOUSEBUTTONDOWN: # gets cursor coordinates on mouse button down to select piece
                 coordinates_init = pygame.mouse.get_pos()
                 if coordinates_init <= (800,800):
@@ -124,7 +122,7 @@ while True:
                     if moveTrue:
                         pygame.mixer.Sound.play(move)
                     update_board()
-        else:
+        else: # ai's turn
             next = ai.next_move(chess)
             if next == None: # checkmate
                 print("Checkmate!")
